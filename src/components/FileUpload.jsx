@@ -1,14 +1,16 @@
 import { useState } from "react";
 
+import DocumentViewer from "./DocumentViewer";
+
 function FileUpload() {
-  const [showFile, setShowFile] = useState([]); // eslint-disable-line no-unused-vars
+  const [pdfURL, setPdfURL] = useState([]);
 
   function handleFileChange(event) {
     const file = Array.from(event.target.files);
 
     if (file[0]) {
       const fileURL = URL.createObjectURL(file[0]);
-      setShowFile(fileURL);
+      setPdfURL(fileURL);
     }
   }
 
@@ -19,6 +21,7 @@ function FileUpload() {
         accept="image/*, .pdf"
         onChange={handleFileChange}
       />
+      <DocumentViewer pdfURL={pdfURL} />
     </>
   );
 }
