@@ -13,11 +13,13 @@ function FileUpload() {
   }
 
   return (
-    <input
-      type="file"
-      accept="image/*, .pdf"
-      onChange={handleFileChange}
-    />
+    <>
+      <input
+        type="file"
+        accept="image/*, .pdf"
+        onChange={handleFileChange}
+      />
+    </>
   );
 }
 
