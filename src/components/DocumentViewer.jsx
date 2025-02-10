@@ -10,11 +10,11 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 function DocumentViewer({ pdfURL }) {
-  const [totalPageNumber, setTotalPageNumber] = useState(null);
+  const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1); // eslint-disable-line no-unused-vars
 
-  function onLoadSuccess({ totalPageNumber }) {
-    setTotalPageNumber(totalPageNumber);
+  function onLoadSuccess({ numPages }) {
+    setNumPages(numPages);
   }
 
   return (
@@ -23,10 +23,14 @@ function DocumentViewer({ pdfURL }) {
         file={pdfURL}
         onLoadSuccess={onLoadSuccess}
       >
-        <Page pageNumber={pageNumber} />
+        <Page
+          pageNumber={pageNumber}
+          width="400"
+          className="border-2"
+        />
       </Document>
       <div>
-        Page {pageNumber} of {totalPageNumber}
+        Page {pageNumber} of {numPages}
       </div>
     </div>
   );
