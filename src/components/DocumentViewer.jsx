@@ -46,9 +46,9 @@ function DocumentViewer({ pdfURL }) {
             className="border-2"
           />
         </Document>
-        <div>
-          Page {pageNumber} of {numPages}
-        </div>
+      </div>
+      <div className="flex justify-center">
+        Page {pageNumber} of {numPages}
       </div>
       <div className="flex justify-center">
         <button
@@ -61,6 +61,7 @@ function DocumentViewer({ pdfURL }) {
           pdfURL={pdfURL}
           numPages={numPages}
           pageNumber={pageNumber}
+          setPageNumber={setPageNumber}
           setNumPages={setNumPages}
         />
         <button

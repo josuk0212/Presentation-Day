@@ -8,9 +8,19 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url
 ).toString();
 
-function SlideViewer({ pdfURL, numPages, pageNumber, setNumPages }) {
+function SlideViewer({
+  pdfURL,
+  numPages,
+  pageNumber,
+  setPageNumber,
+  setNumPages,
+}) {
   function onLoadSuccess({ numPages }) {
     setNumPages(numPages);
+  }
+
+  function handleMovePage(event, info) {
+    setPageNumber(info._pageIndex + 1);
   }
 
   return (
@@ -33,6 +43,7 @@ function SlideViewer({ pdfURL, numPages, pageNumber, setNumPages }) {
                     className={
                       index === 0 ? "border-8 border-primary" : "border-2"
                     }
+                    onClick={handleMovePage}
                   />
                 )
               );
@@ -49,5 +60,6 @@ SlideViewer.propTypes = {
   pdfURL: PropTypes.string.isRequired,
   numPages: PropTypes.number.isRequired,
   pageNumber: PropTypes.number.isRequired,
+  setPageNumber: PropTypes.func.isRequired,
   setNumPages: PropTypes.func.isRequired,
 };
