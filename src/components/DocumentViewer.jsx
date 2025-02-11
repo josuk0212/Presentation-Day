@@ -14,7 +14,6 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 function DocumentViewer({ pdfURL }) {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
-  const [slideNumber, setSlideNumber] = useState(1); // eslint-disable-line no-unused-vars
 
   function onLoadSuccess({ numPages }) {
     setNumPages(numPages);
@@ -61,8 +60,8 @@ function DocumentViewer({ pdfURL }) {
         <SlideViewer
           pdfURL={pdfURL}
           numPages={numPages}
+          pageNumber={pageNumber}
           setNumPages={setNumPages}
-          slideNumber={slideNumber}
         />
         <button
           className="btn btn-outline"
