@@ -3,7 +3,7 @@ import { useState } from "react";
 import DocumentViewer from "./DocumentViewer";
 
 function FileUpload() {
-  const [pdfURL, setPdfURL] = useState([]);
+  const [pdfURL, setPdfURL] = useState("");
 
   function handleFileChange(event) {
     const file = Array.from(event.target.files);
@@ -21,7 +21,7 @@ function FileUpload() {
         accept="image/*, .pdf"
         onChange={handleFileChange}
       />
-      <DocumentViewer pdfURL={pdfURL} />
+      {pdfURL && <DocumentViewer pdfURL={pdfURL} />}
     </>
   );
 }

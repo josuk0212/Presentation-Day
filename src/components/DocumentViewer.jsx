@@ -66,31 +66,33 @@ function DocumentViewer({ pdfURL }) {
       <div className="flex justify-center">
         Page {pageNumber} of {numPages}
       </div>
-      <div className="flex justify-center">
-        <button
-          className="btn btn-outline"
-          onClick={handlePreviousPage}
-        >
-          이전
-        </button>
-        <div className="flex w-[1010px] overflow-hidden">
-          <div style={{ transform: `translateX(${moveIndex}px)` }}>
-            <SlideViewer
-              pdfURL={pdfURL}
-              numPages={numPages}
-              pageNumber={pageNumber}
-              setPageNumber={setPageNumber}
-              setNumPages={setNumPages}
-            />
+      {numPages !== 1 && (
+        <div className="flex justify-center">
+          <button
+            className="btn btn-outline"
+            onClick={handlePreviousPage}
+          >
+            이전
+          </button>
+          <div className="flex w-[1010px] overflow-hidden">
+            <div style={{ transform: `translateX(${moveIndex}px)` }}>
+              <SlideViewer
+                pdfURL={pdfURL}
+                numPages={numPages}
+                pageNumber={pageNumber}
+                setPageNumber={setPageNumber}
+                setNumPages={setNumPages}
+              />
+            </div>
           </div>
+          <button
+            className="btn btn-outline"
+            onClick={handleNextPage}
+          >
+            다음
+          </button>
         </div>
-        <button
-          className="btn btn-outline"
-          onClick={handleNextPage}
-        >
-          다음
-        </button>
-      </div>
+      )}
     </>
   );
 }
