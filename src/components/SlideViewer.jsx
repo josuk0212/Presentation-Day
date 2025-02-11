@@ -29,6 +29,7 @@ function SlideViewer({
         <Document
           file={pdfURL}
           onLoadSuccess={onLoadSuccess}
+          loading={false}
           className="flex gap-x-14"
         >
           {Array(numPages)

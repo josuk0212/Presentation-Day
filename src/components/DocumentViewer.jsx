@@ -43,12 +43,18 @@ function DocumentViewer({ pdfURL }) {
     pageNumber % 5 === 0 && setMoveIndex((prev) => prev - 1050);
   }
 
+  function handleChangeLoadingText() {
+    const loadingText = "Loding...";
+    return loadingText;
+  }
+
   return (
     <>
       <div className="flex justify-center">
         <Document
           file={pdfURL}
           onLoadSuccess={onLoadSuccess}
+          loading={handleChangeLoadingText}
         >
           <Page
             pageNumber={pageNumber}
