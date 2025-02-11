@@ -14,6 +14,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 function DocumentViewer({ pdfURL }) {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
+  const [moveIndex, setMoveIndex] = useState(0);
 
   function onLoadSuccess({ numPages }) {
     setNumPages(numPages);
@@ -22,15 +23,24 @@ function DocumentViewer({ pdfURL }) {
   function handlePreviousPage() {
     if (pageNumber === 1) {
       return;
+    } else {
+      setPageNumber(pageNumber - 1);
     }
-    setPageNumber(pageNumber - 1);
+
+    if (moveIndex === 0) {
+      return;
+    } else {
+      pageNumber % 5 === 1 && setMoveIndex((prev) => prev + 1050);
+    }
   }
 
   function handleNextPage() {
     if (pageNumber === numPages) {
       return;
+    } else {
+      setPageNumber(pageNumber + 1);
     }
-    setPageNumber(pageNumber + 1);
+    pageNumber % 5 === 0 && setMoveIndex((prev) => prev - 1050);
   }
 
   return (
@@ -57,13 +67,17 @@ function DocumentViewer({ pdfURL }) {
         >
           이전
         </button>
-        <SlideViewer
-          pdfURL={pdfURL}
-          numPages={numPages}
-          pageNumber={pageNumber}
-          setPageNumber={setPageNumber}
-          setNumPages={setNumPages}
-        />
+        <div className="flex w-[1010px] overflow-hidden">
+          <div style={{ transform: `translateX(${moveIndex}px)` }}>
+            <SlideViewer
+              pdfURL={pdfURL}
+              numPages={numPages}
+              pageNumber={pageNumber}
+              setPageNumber={setPageNumber}
+              setNumPages={setNumPages}
+            />
+          </div>
+        </div>
         <button
           className="btn btn-outline"
           onClick={handleNextPage}

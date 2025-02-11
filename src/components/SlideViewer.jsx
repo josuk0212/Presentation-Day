@@ -19,7 +19,7 @@ function SlideViewer({
     setNumPages(numPages);
   }
 
-  function handleMovePage(event, info) {
+  function handleMovePage(_, info) {
     setPageNumber(info._pageIndex + 1);
   }
 
@@ -35,13 +35,15 @@ function SlideViewer({
             .fill(null)
             .map((_, index) => {
               return (
-                index < 5 && (
+                index <= numPages && (
                   <Page
                     key={index}
-                    pageNumber={pageNumber + index}
+                    pageNumber={index + 1}
                     width="150"
                     className={
-                      index === 0 ? "border-8 border-primary" : "border-2"
+                      index + 1 === pageNumber
+                        ? "border-8 border-primary"
+                        : "border-2"
                     }
                     onClick={handleMovePage}
                   />
