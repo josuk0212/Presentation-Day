@@ -4,6 +4,7 @@ import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
+import useOnOffStore from "../../stores/useOnOffStore";
 import SlideViewer from "./SlideViewer";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -15,6 +16,7 @@ function DocumentViewer({ pdfUrl }) {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [moveIndex, setMoveIndex] = useState(0);
+  const { isFullScreen } = useOnOffStore();
 
   function onLoadSuccess({ numPages }) {
     setNumPages(numPages);
@@ -62,7 +64,7 @@ function DocumentViewer({ pdfUrl }) {
         >
           <Page
             pageNumber={pageNumber}
-            width="400"
+            scale={isFullScreen ? "1.5" : "0.5"}
           />
         </Document>
       </div>

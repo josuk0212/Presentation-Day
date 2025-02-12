@@ -1,13 +1,16 @@
 import PropTypes from "prop-types";
 
+import useOnOffStore from "../../stores/useOnOffStore";
 import Button from "../Share/Button";
 
 function Modal({ setIsModal }) {
+  const { setIsFullScreen } = useOnOffStore();
   const closeButtonTitle = "X";
   const viewButtonTitle = "Full Screen";
 
   function closeModal() {
     setIsModal(false);
+    setIsFullScreen(false);
   }
 
   function viewFullScreen() {
@@ -17,6 +20,7 @@ function Modal({ setIsModal }) {
       documentSection.exitFullscreen();
     } else {
       documentSection.requestFullscreen();
+      setIsFullScreen(true);
     }
   }
 
