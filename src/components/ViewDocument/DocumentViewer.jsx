@@ -4,6 +4,7 @@ import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
+import useOnOffStore from "../../stores/useOnOffStore";
 import SlideViewer from "./SlideViewer";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -11,10 +12,11 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url
 ).toString();
 
-function DocumentViewer({ pdfURL }) {
+function DocumentViewer({ pdfUrl }) {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [moveIndex, setMoveIndex] = useState(0);
+  const { isFullScreen } = useOnOffStore();
 
   function onLoadSuccess({ numPages }) {
     setNumPages(numPages);
@@ -50,16 +52,19 @@ function DocumentViewer({ pdfURL }) {
 
   return (
     <>
-      <div className="flex justify-center">
+      <div
+        id="view-document"
+        className="flex justify-center"
+      >
         <Document
-          file={pdfURL}
+          file={pdfUrl}
           onLoadSuccess={onLoadSuccess}
           loading={handleChangeLoadingText}
+          className="m-auto border-2"
         >
           <Page
             pageNumber={pageNumber}
-            width="400"
-            className="border-2"
+            scale={isFullScreen ? "1.5" : "0.5"}
           />
         </Document>
       </div>
@@ -77,7 +82,7 @@ function DocumentViewer({ pdfURL }) {
           <div className="flex w-[1010px] overflow-hidden">
             <div style={{ transform: `translateX(${moveIndex}px)` }}>
               <SlideViewer
-                pdfURL={pdfURL}
+                pdfUrl={pdfUrl}
                 numPages={numPages}
                 pageNumber={pageNumber}
                 setPageNumber={setPageNumber}
@@ -100,5 +105,5 @@ function DocumentViewer({ pdfURL }) {
 export default DocumentViewer;
 
 DocumentViewer.propTypes = {
-  pdfURL: PropTypes.string.isRequired,
+  pdfUrl: PropTypes.string.isRequired,
 };

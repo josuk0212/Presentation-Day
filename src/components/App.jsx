@@ -1,11 +1,21 @@
-import FileUpload from "./FileUpload";
+import { Route, Routes } from "react-router";
+
+import Home from "./HomePage/Home";
+import SpeakerPage from "./PresentationPage/SpeakerPage";
 
 function App() {
   return (
     <>
-      <h1 className="flex justify-center text-5xl mt-16">Welcome H P</h1>
-      <div className="flex justify-center text-2xl mt-6">Help Presentation</div>
-      <FileUpload />
+      <Routes>
+        <Route
+          path="/"
+          element={<Home />}
+        />
+        <Route
+          path="/Speaker"
+          element={<SpeakerPage />}
+        />
+      </Routes>
     </>
   );
 }

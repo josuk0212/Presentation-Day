@@ -9,7 +9,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 function SlideViewer({
-  pdfURL,
+  pdfUrl,
   numPages,
   pageNumber,
   setPageNumber,
@@ -27,7 +27,7 @@ function SlideViewer({
     <>
       <div className="justify-center flex">
         <Document
-          file={pdfURL}
+          file={pdfUrl}
           onLoadSuccess={onLoadSuccess}
           loading={false}
           className="flex gap-x-14"
@@ -60,7 +60,7 @@ function SlideViewer({
 export default SlideViewer;
 
 SlideViewer.propTypes = {
-  pdfURL: PropTypes.string.isRequired,
+  pdfUrl: PropTypes.string.isRequired,
   numPages: PropTypes.number.isRequired,
   pageNumber: PropTypes.number.isRequired,
   setPageNumber: PropTypes.func.isRequired,
