@@ -50,7 +50,10 @@ function DocumentViewer({ pdfUrl }) {
 
   return (
     <>
-      <div className="flex justify-center">
+      <div
+        id="view-document"
+        className="flex justify-center"
+      >
         <Document
           file={pdfUrl}
           onLoadSuccess={onLoadSuccess}

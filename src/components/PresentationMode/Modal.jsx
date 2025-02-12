@@ -3,9 +3,21 @@ import PropTypes from "prop-types";
 import Button from "../Share/Button";
 
 function Modal({ setIsModal }) {
-  const buttonTitle = "X";
+  const closeButtonTitle = "X";
+  const viewButtonTitle = "Full Screen";
+
   function closeModal() {
     setIsModal(false);
+  }
+
+  function viewFullScreen() {
+    const documentSection = document.getElementById("view-document");
+
+    if (document.fullscreenElement) {
+      documentSection.exitFullscreen();
+    } else {
+      documentSection.requestFullscreen();
+    }
   }
 
   return (
@@ -15,7 +27,7 @@ function Modal({ setIsModal }) {
           <div className="absolute top-0 right-0 mt-3 mr-3">
             <Button
               onClickEvent={closeModal}
-              title={buttonTitle}
+              title={closeButtonTitle}
             />
           </div>
           <span className="mt-10 ml-6">
@@ -24,6 +36,12 @@ function Modal({ setIsModal }) {
               사용해주시기 바랍니다.
             </p>
           </span>
+          <div className="absolute bottom-0 right-0 mb-3 mr-3">
+            <Button
+              onClickEvent={viewFullScreen}
+              title={viewButtonTitle}
+            />
+          </div>
         </div>
       </div>
     </>
