@@ -14,6 +14,7 @@ function Home() {
 
   function handlePresentationMode() {
     setIsModal(true);
+    window.open("http://localhost:5173/Speaker");
   }
 
   return (
