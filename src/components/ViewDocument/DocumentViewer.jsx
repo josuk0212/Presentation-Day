@@ -58,11 +58,11 @@ function DocumentViewer({ pdfUrl }) {
           file={pdfUrl}
           onLoadSuccess={onLoadSuccess}
           loading={handleChangeLoadingText}
+          className="m-auto border-2"
         >
           <Page
             pageNumber={pageNumber}
             width="400"
-            className="border-2"
           />
         </Document>
       </div>
