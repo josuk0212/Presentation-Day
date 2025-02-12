@@ -1,16 +1,13 @@
-import { useState } from "react";
-
-import DocumentViewer from "../ViewDocument/DocumentViewer";
+import useFileStore from "../../stores/useFileStore";
 
 function FileUpload() {
-  const [pdfURL, setPdfURL] = useState("");
+  const { setPdfUrl } = useFileStore();
 
   function handleFileChange(event) {
     const file = Array.from(event.target.files);
 
     if (file[0]) {
-      const fileURL = URL.createObjectURL(file[0]);
-      setPdfURL(fileURL);
+      setPdfUrl(URL.createObjectURL(file[0]));
     }
   }
 
@@ -20,8 +17,8 @@ function FileUpload() {
         type="file"
         accept="image/*, .pdf"
         onChange={handleFileChange}
+        className="file-input file-input-bordered file-input-sm w-full max-w-xs"
       />
-      {pdfURL && <DocumentViewer pdfURL={pdfURL} />}
     </>
   );
 }

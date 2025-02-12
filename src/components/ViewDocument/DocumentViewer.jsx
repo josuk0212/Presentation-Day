@@ -11,7 +11,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url
 ).toString();
 
-function DocumentViewer({ pdfURL }) {
+function DocumentViewer({ pdfUrl }) {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [moveIndex, setMoveIndex] = useState(0);
@@ -52,7 +52,7 @@ function DocumentViewer({ pdfURL }) {
     <>
       <div className="flex justify-center">
         <Document
-          file={pdfURL}
+          file={pdfUrl}
           onLoadSuccess={onLoadSuccess}
           loading={handleChangeLoadingText}
         >
@@ -77,7 +77,7 @@ function DocumentViewer({ pdfURL }) {
           <div className="flex w-[1010px] overflow-hidden">
             <div style={{ transform: `translateX(${moveIndex}px)` }}>
               <SlideViewer
-                pdfURL={pdfURL}
+                pdfUrl={pdfUrl}
                 numPages={numPages}
                 pageNumber={pageNumber}
                 setPageNumber={setPageNumber}
@@ -100,5 +100,5 @@ function DocumentViewer({ pdfURL }) {
 export default DocumentViewer;
 
 DocumentViewer.propTypes = {
-  pdfURL: PropTypes.string.isRequired,
+  pdfUrl: PropTypes.string.isRequired,
 };
