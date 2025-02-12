@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import DocumentViewer from "./DocumentViewer";
+import DocumentViewer from "../ViewDocument/DocumentViewer";
 
 function FileUpload() {
   const [pdfURL, setPdfURL] = useState("");
