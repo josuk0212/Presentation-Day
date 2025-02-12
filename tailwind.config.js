@@ -7,6 +7,7 @@ export default {
     extend: {
       colors: {
         primary: "#7e22ce",
+        modalbg: "#e2e8f0",
       },
     },
   },
