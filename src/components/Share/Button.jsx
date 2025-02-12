@@ -1,18 +1,19 @@
 import PropTypes from "prop-types";
 
-function PresentationButton({ onClickEvent }) {
+function Button({ onClickEvent, title }) {
   return (
     <button
       onClick={onClickEvent}
       className="btn"
     >
-      Go to Presentation!
+      {title}
     </button>
   );
 }
 
-export default PresentationButton;
+export default Button;
 
-PresentationButton.propTypes = {
+Button.propTypes = {
   onClickEvent: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
 };
