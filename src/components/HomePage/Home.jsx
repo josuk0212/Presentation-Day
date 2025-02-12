@@ -21,13 +21,13 @@ function Home() {
     <>
       <h1 className="flex justify-center text-5xl mt-16">Welcome HP</h1>
       <div className="flex justify-center text-2xl mt-6">Help Presentation</div>
+      {isModal && <Modal setIsModal={setIsModal} />}
       <FileUpload />
       {pdfUrl && <DocumentViewer pdfUrl={pdfUrl} />}
       <Button
         onClickEvent={handlePresentationMode}
         title={buttonTitle}
       />
-      {isModal && <Modal />}
     </>
   );
 }
