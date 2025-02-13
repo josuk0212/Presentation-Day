@@ -58,6 +58,19 @@ function DocumentViewer({ pdfUrl }) {
     pageNumber % 5 === 0 && setMoveIndex((prev) => prev - 1050);
   }
 
+  function handleKeyDown(event) {
+    if (event.key === "ArrowLeft") {
+      handlePreviousPage();
+    } else if (event.key === "ArrowRight") {
+      handleNextPage();
+    }
+  }
+
+  useEffect(() => {
+    addEventListener("keydown", handleKeyDown);
+    return () => removeEventListener("keydown", handleKeyDown);
+  }, [pageNumber]);
+
   function handleChangeLoadingText() {
     const loadingText = "Loding...";
     return loadingText;
