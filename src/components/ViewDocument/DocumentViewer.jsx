@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -17,6 +17,19 @@ function DocumentViewer({ pdfUrl }) {
   const [pageNumber, setPageNumber] = useState(1);
   const [moveIndex, setMoveIndex] = useState(0);
   const { isFullScreen } = useOnOffStore();
+
+  const documentViewerChannel = useMemo(() => {
+    const channel = new BroadcastChannel("path");
+    channel.postMessage([pageNumber, moveIndex]);
+    return channel;
+  }, [pageNumber, moveIndex]);
+
+  useEffect(() => {
+    documentViewerChannel.onmessage = (shareState) => {
+      setPageNumber(shareState.data[0]);
+      setMoveIndex(shareState.data[1]);
+    };
+  }, [documentViewerChannel]);
 
   function onLoadSuccess({ totalPageNumber }) {
     setTotalPageNumber(totalPageNumber);

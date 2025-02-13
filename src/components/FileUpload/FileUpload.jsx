@@ -5,9 +5,11 @@ function FileUpload() {
 
   function handleFileChange(event) {
     const file = Array.from(event.target.files);
+    const pdfUrl = URL.createObjectURL(file[0]);
 
     if (file[0]) {
-      setPdfUrl(URL.createObjectURL(file[0]));
+      setPdfUrl(pdfUrl);
+      localStorage.setItem("pdfUrl", pdfUrl);
     }
   }
 
