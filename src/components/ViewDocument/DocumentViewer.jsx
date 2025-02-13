@@ -13,13 +13,13 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 function DocumentViewer({ pdfUrl }) {
-  const [numPages, setNumPages] = useState(null);
+  const [totalPageNumber, setTotalPageNumber] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [moveIndex, setMoveIndex] = useState(0);
   const { isFullScreen } = useOnOffStore();
 
-  function onLoadSuccess({ numPages }) {
-    setNumPages(numPages);
+  function onLoadSuccess({ totalPageNumber }) {
+    setTotalPageNumber(totalPageNumber);
   }
 
   function handlePreviousPage() {
@@ -37,7 +37,7 @@ function DocumentViewer({ pdfUrl }) {
   }
 
   function handleNextPage() {
-    if (pageNumber === numPages) {
+    if (pageNumber === totalPageNumber) {
       return;
     } else {
       setPageNumber(pageNumber + 1);
@@ -69,9 +69,9 @@ function DocumentViewer({ pdfUrl }) {
         </Document>
       </div>
       <div className="flex justify-center">
-        Page {pageNumber} of {numPages}
+        Page {pageNumber} of {totalPageNumber}
       </div>
-      {numPages !== 1 && (
+      {totalPageNumber !== 1 && (
         <div className="flex justify-center">
           <button
             className="btn btn-outline"
@@ -83,10 +83,10 @@ function DocumentViewer({ pdfUrl }) {
             <div style={{ transform: `translateX(${moveIndex}px)` }}>
               <SlideViewer
                 pdfUrl={pdfUrl}
-                numPages={numPages}
+                totalPageNumber={totalPageNumber}
                 pageNumber={pageNumber}
                 setPageNumber={setPageNumber}
-                setNumPages={setNumPages}
+                setTotalPageNumber={setTotalPageNumber}
               />
             </div>
           </div>
