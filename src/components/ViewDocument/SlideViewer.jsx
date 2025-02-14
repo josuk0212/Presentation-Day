@@ -10,13 +10,13 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 
 function SlideViewer({
   pdfUrl,
-  numPages,
+  totalPageNumber,
   pageNumber,
   setPageNumber,
-  setNumPages,
+  setTotalPageNumber,
 }) {
   function onLoadSuccess({ numPages }) {
-    setNumPages(numPages);
+    setTotalPageNumber(numPages);
   }
 
   function handleMovePage(_, info) {
@@ -32,11 +32,11 @@ function SlideViewer({
           loading={false}
           className="flex gap-x-14"
         >
-          {Array(numPages)
+          {Array(totalPageNumber)
             .fill(null)
             .map((_, index) => {
               return (
-                index <= numPages && (
+                index <= totalPageNumber && (
                   <Page
                     key={index}
                     pageNumber={index + 1}
@@ -61,8 +61,8 @@ export default SlideViewer;
 
 SlideViewer.propTypes = {
   pdfUrl: PropTypes.string.isRequired,
-  numPages: PropTypes.number.isRequired,
+  totalPageNumber: PropTypes.number.isRequired,
   pageNumber: PropTypes.number.isRequired,
   setPageNumber: PropTypes.func.isRequired,
-  setNumPages: PropTypes.func.isRequired,
+  setTotalPageNumber: PropTypes.func.isRequired,
 };

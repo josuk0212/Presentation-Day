@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -13,13 +13,26 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 function DocumentViewer({ pdfUrl }) {
-  const [numPages, setNumPages] = useState(null);
+  const [totalPageNumber, setTotalPageNumber] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [moveIndex, setMoveIndex] = useState(0);
   const { isFullScreen } = useOnOffStore();
 
-  function onLoadSuccess({ numPages }) {
-    setNumPages(numPages);
+  const documentViewerChannel = useMemo(() => {
+    const channel = new BroadcastChannel("path");
+    channel.postMessage([pageNumber, moveIndex]);
+    return channel;
+  }, [pageNumber, moveIndex]);
+
+  useEffect(() => {
+    documentViewerChannel.onmessage = (shareState) => {
+      setPageNumber(shareState.data[0]);
+      setMoveIndex(shareState.data[1]);
+    };
+  }, [documentViewerChannel]);
+
+  function onLoadSuccess({ totalPageNumber }) {
+    setTotalPageNumber(totalPageNumber);
   }
 
   function handlePreviousPage() {
@@ -37,13 +50,26 @@ function DocumentViewer({ pdfUrl }) {
   }
 
   function handleNextPage() {
-    if (pageNumber === numPages) {
+    if (pageNumber === totalPageNumber) {
       return;
     } else {
       setPageNumber(pageNumber + 1);
     }
     pageNumber % 5 === 0 && setMoveIndex((prev) => prev - 1050);
   }
+
+  function handleKeyDown(event) {
+    if (event.key === "ArrowLeft") {
+      handlePreviousPage();
+    } else if (event.key === "ArrowRight") {
+      handleNextPage();
+    }
+  }
+
+  useEffect(() => {
+    addEventListener("keydown", handleKeyDown);
+    return () => removeEventListener("keydown", handleKeyDown);
+  }, [pageNumber]);
 
   function handleChangeLoadingText() {
     const loadingText = "Loding...";
@@ -69,9 +95,9 @@ function DocumentViewer({ pdfUrl }) {
         </Document>
       </div>
       <div className="flex justify-center">
-        Page {pageNumber} of {numPages}
+        Page {pageNumber} of {totalPageNumber}
       </div>
-      {numPages !== 1 && (
+      {totalPageNumber !== 1 && (
         <div className="flex justify-center">
           <button
             className="btn btn-outline"
@@ -83,10 +109,10 @@ function DocumentViewer({ pdfUrl }) {
             <div style={{ transform: `translateX(${moveIndex}px)` }}>
               <SlideViewer
                 pdfUrl={pdfUrl}
-                numPages={numPages}
+                totalPageNumber={totalPageNumber}
                 pageNumber={pageNumber}
                 setPageNumber={setPageNumber}
-                setNumPages={setNumPages}
+                setTotalPageNumber={setTotalPageNumber}
               />
             </div>
           </div>
