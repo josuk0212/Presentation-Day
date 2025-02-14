@@ -12,7 +12,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url
 ).toString();
 
-function DocumentViewer({ pdfUrl }) {
+function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
   const [totalPageNumber, setTotalPageNumber] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [moveIndex, setMoveIndex] = useState(0);
@@ -72,12 +72,12 @@ function DocumentViewer({ pdfUrl }) {
     return () => removeEventListener("keydown", handleKeyDown);
   }, [pageNumber]);
 
-  function getCursorCoordinate(event) {
-    const coordX = event.clientX;
-    const coordY = event.clientY;
+  const coordX = localStorage.getItem("coordX");
+  const coordY = localStorage.getItem("coordY");
 
+  addEventListener("storage", () => {
     setCoordinate({ x: coordX, y: coordY });
-  }
+  });
 
   function handleChangeLoadingText() {
     const loadingText = "Loding...";
@@ -102,16 +102,18 @@ function DocumentViewer({ pdfUrl }) {
             scale={isFullScreen ? "1.5" : "0.5"}
           />
         </Document>
-        <div
-          style={{
-            position: "absolute",
-            width: "2rem",
-            height: "2rem",
-            background: "red",
-            left: `${coordinate.x - 15}px`,
-            top: `${coordinate.y - 15}px`,
-          }}
-        ></div>
+        {isFullScreen && (
+          <div
+            style={{
+              position: "absolute",
+              width: "2rem",
+              height: "2rem",
+              background: "red",
+              left: `${coordinate.x - 15}px`,
+              top: `${coordinate.y - 15}px`,
+            }}
+          ></div>
+        )}
       </div>
       <div className="flex justify-center">
         Page {pageNumber} of {totalPageNumber}
