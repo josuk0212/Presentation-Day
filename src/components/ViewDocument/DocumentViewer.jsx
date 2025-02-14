@@ -89,7 +89,7 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
       <div
         id="view-document"
         onMouseMove={getCursorCoordinate}
-        className="flex justify-center"
+        className="flex justify-center w-min h-min"
       >
         <Document
           file={pdfUrl}
