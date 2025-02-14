@@ -16,6 +16,7 @@ function DocumentViewer({ pdfUrl }) {
   const [totalPageNumber, setTotalPageNumber] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [moveIndex, setMoveIndex] = useState(0);
+  const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
   const { isFullScreen } = useOnOffStore();
 
   const documentViewerChannel = useMemo(() => {
@@ -71,6 +72,13 @@ function DocumentViewer({ pdfUrl }) {
     return () => removeEventListener("keydown", handleKeyDown);
   }, [pageNumber]);
 
+  function getCursorCoordinate(event) {
+    const coordX = event.clientX;
+    const coordY = event.clientY;
+
+    setCoordinate({ x: coordX, y: coordY });
+  }
+
   function handleChangeLoadingText() {
     const loadingText = "Loding...";
     return loadingText;
@@ -80,6 +88,7 @@ function DocumentViewer({ pdfUrl }) {
     <>
       <div
         id="view-document"
+        onMouseMove={getCursorCoordinate}
         className="flex justify-center"
       >
         <Document
@@ -93,6 +102,16 @@ function DocumentViewer({ pdfUrl }) {
             scale={isFullScreen ? "1.5" : "0.5"}
           />
         </Document>
+        <div
+          style={{
+            position: "absolute",
+            width: "2rem",
+            height: "2rem",
+            background: "red",
+            left: `${coordinate.x - 15}px`,
+            top: `${coordinate.y - 15}px`,
+          }}
+        ></div>
       </div>
       <div className="flex justify-center">
         Page {pageNumber} of {totalPageNumber}
@@ -132,4 +151,5 @@ export default DocumentViewer;
 
 DocumentViewer.propTypes = {
   pdfUrl: PropTypes.string.isRequired,
+  getCursorCoordinate: PropTypes.func.isRequired,
 };
