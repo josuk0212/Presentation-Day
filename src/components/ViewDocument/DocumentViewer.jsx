@@ -5,6 +5,7 @@ import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
 import useOnOffStore from "../../stores/useOnOffStore";
+import CursorPointer from "../PresentationMode/CursorPointer";
 import SlideViewer from "./SlideViewer";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -72,8 +73,8 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
     return () => removeEventListener("keydown", handleKeyDown);
   }, [pageNumber]);
 
-  const coordX = localStorage.getItem("coordX");
-  const coordY = localStorage.getItem("coordY");
+  const coordX = Number(localStorage.getItem("coordX"));
+  const coordY = Number(localStorage.getItem("coordY"));
 
   addEventListener("storage", () => {
     setCoordinate({ x: coordX, y: coordY });
@@ -103,18 +104,7 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
               scale={isFullScreen ? "1.5" : "0.5"}
             />
           </Document>
-          {isFullScreen && (
-            <div
-              style={{
-                position: "absolute",
-                width: "2rem",
-                height: "2rem",
-                background: "red",
-                left: `${coordinate.x - 15}px`,
-                top: `${coordinate.y - 15}px`,
-              }}
-            ></div>
-          )}
+          {isFullScreen && <CursorPointer coordinate={coordinate} />}
         </div>
       </div>
       <div className="flex justify-center">
