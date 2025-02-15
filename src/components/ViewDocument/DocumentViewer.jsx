@@ -86,34 +86,36 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
 
   return (
     <>
-      <div
-        id="view-document"
-        onMouseMove={getCursorCoordinate}
-        className="flex justify-center w-min h-min"
-      >
-        <Document
-          file={pdfUrl}
-          onLoadSuccess={onLoadSuccess}
-          loading={handleChangeLoadingText}
-          className="m-auto border-2"
+      <div className="flex justify-center">
+        <div
+          id="view-document"
+          onMouseMove={getCursorCoordinate}
+          className="flex justify-center w-min h-min"
         >
-          <Page
-            pageNumber={pageNumber}
-            scale={isFullScreen ? "1.5" : "0.5"}
-          />
-        </Document>
-        {isFullScreen && (
-          <div
-            style={{
-              position: "absolute",
-              width: "2rem",
-              height: "2rem",
-              background: "red",
-              left: `${coordinate.x - 15}px`,
-              top: `${coordinate.y - 15}px`,
-            }}
-          ></div>
-        )}
+          <Document
+            file={pdfUrl}
+            onLoadSuccess={onLoadSuccess}
+            loading={handleChangeLoadingText}
+            className="m-auto border-2"
+          >
+            <Page
+              pageNumber={pageNumber}
+              scale={isFullScreen ? "1.5" : "0.5"}
+            />
+          </Document>
+          {isFullScreen && (
+            <div
+              style={{
+                position: "absolute",
+                width: "2rem",
+                height: "2rem",
+                background: "red",
+                left: `${coordinate.x - 15}px`,
+                top: `${coordinate.y - 15}px`,
+              }}
+            ></div>
+          )}
+        </div>
       </div>
       <div className="flex justify-center">
         Page {pageNumber} of {totalPageNumber}
