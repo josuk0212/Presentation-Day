@@ -18,7 +18,7 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
   const [pageNumber, setPageNumber] = useState(1);
   const [moveIndex, setMoveIndex] = useState(0);
   const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
-  const { isFullScreen } = useOnOffStore();
+  const { isFullScreen, isOpenSpeakerPage } = useOnOffStore();
 
   const documentViewerChannel = useMemo(() => {
     const channel = new BroadcastChannel("path");
@@ -104,7 +104,7 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
               scale={isFullScreen ? "1.5" : "0.5"}
             />
           </Document>
-          {isFullScreen && <CursorPointer coordinate={coordinate} />}
+          {isOpenSpeakerPage && <CursorPointer coordinate={coordinate} />}
         </div>
       </div>
       <div className="flex justify-center">
