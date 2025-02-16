@@ -5,6 +5,7 @@ import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
 import useOnOffStore from "../../stores/useOnOffStore";
+import Drawing from "../PresentationMode/Canvas";
 import CursorPointer from "../PresentationMode/CursorPointer";
 import SlideViewer from "./SlideViewer";
 
@@ -85,6 +86,7 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
           onMouseMove={getCursorCoordinate}
           className="flex justify-center w-min h-min"
         >
+          <Drawing />
           <Document
             file={pdfUrl}
             onLoadSuccess={onLoadSuccess}
