@@ -1,6 +1,16 @@
 import PropTypes from "prop-types";
+import { useState } from "react";
 
-function CursorPointer({ coordinate }) {
+function CursorPointer() {
+  const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
+
+  addEventListener("storage", () => {
+    const coordX = Number(localStorage.getItem("coordX"));
+    const coordY = Number(localStorage.getItem("coordY"));
+
+    setCoordinate({ x: coordX * 4, y: coordY * 2.9 });
+  });
+
   return (
     <div
       style={{
@@ -8,8 +18,8 @@ function CursorPointer({ coordinate }) {
         width: "2rem",
         height: "2rem",
         background: "red",
-        left: `${coordinate.x - 15}px`,
-        top: `${coordinate.y - 15}px`,
+        left: `${coordinate.x}px`,
+        top: `${coordinate.y}px`,
       }}
     ></div>
   );

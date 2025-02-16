@@ -4,8 +4,8 @@ function SpeakerPage() {
   const pdfUrl = localStorage.getItem("pdfUrl");
 
   function getCursorCoordinate(event) {
-    const coordX = event.clientX;
-    const coordY = event.clientY;
+    const coordX = event.screenX;
+    const coordY = event.screenY;
 
     localStorage.setItem("coordX", coordX);
     localStorage.setItem("coordY", coordY);

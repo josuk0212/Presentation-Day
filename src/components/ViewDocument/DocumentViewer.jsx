@@ -17,7 +17,6 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
   const [totalPageNumber, setTotalPageNumber] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [moveIndex, setMoveIndex] = useState(0);
-  const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
   const { isFullScreen, isOpenSpeakerPage } = useOnOffStore();
 
   const documentViewerChannel = useMemo(() => {
@@ -73,13 +72,6 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
     return () => removeEventListener("keydown", handleKeyDown);
   }, [pageNumber]);
 
-  const coordX = Number(localStorage.getItem("coordX"));
-  const coordY = Number(localStorage.getItem("coordY"));
-
-  addEventListener("storage", () => {
-    setCoordinate({ x: coordX, y: coordY });
-  });
-
   function handleChangeLoadingText() {
     const loadingText = "Loding...";
     return loadingText;
@@ -104,7 +96,7 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
               scale={isFullScreen ? "1.5" : "0.5"}
             />
           </Document>
-          {isOpenSpeakerPage && <CursorPointer coordinate={coordinate} />}
+          {isOpenSpeakerPage && <CursorPointer />}
         </div>
       </div>
       <div className="flex justify-center">
