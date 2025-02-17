@@ -5,6 +5,8 @@ import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
 import useOnOffStore from "../../stores/useOnOffStore";
+import Drawing from "../PresentationMode/Canvas";
+import CursorPointer from "../PresentationMode/CursorPointer";
 import SlideViewer from "./SlideViewer";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -12,11 +14,11 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url
 ).toString();
 
-function DocumentViewer({ pdfUrl }) {
+function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
   const [totalPageNumber, setTotalPageNumber] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [moveIndex, setMoveIndex] = useState(0);
-  const { isFullScreen } = useOnOffStore();
+  const { isFullScreen, isOpenSpeakerPage } = useOnOffStore();
 
   const documentViewerChannel = useMemo(() => {
     const channel = new BroadcastChannel("path");
@@ -78,21 +80,26 @@ function DocumentViewer({ pdfUrl }) {
 
   return (
     <>
-      <div
-        id="view-document"
-        className="flex justify-center"
-      >
-        <Document
-          file={pdfUrl}
-          onLoadSuccess={onLoadSuccess}
-          loading={handleChangeLoadingText}
-          className="m-auto border-2"
+      <div className="flex justify-center">
+        <div
+          id="view-document"
+          onMouseMove={getCursorCoordinate}
+          className="flex justify-center w-min h-min"
         >
-          <Page
-            pageNumber={pageNumber}
-            scale={isFullScreen ? "1.5" : "0.5"}
-          />
-        </Document>
+          <Drawing />
+          <Document
+            file={pdfUrl}
+            onLoadSuccess={onLoadSuccess}
+            loading={handleChangeLoadingText}
+            className="m-auto border-2"
+          >
+            <Page
+              pageNumber={pageNumber}
+              scale={isFullScreen ? "1.5" : "0.5"}
+            />
+          </Document>
+          {isOpenSpeakerPage && <CursorPointer />}
+        </div>
       </div>
       <div className="flex justify-center">
         Page {pageNumber} of {totalPageNumber}
@@ -132,4 +139,5 @@ export default DocumentViewer;
 
 DocumentViewer.propTypes = {
   pdfUrl: PropTypes.string.isRequired,
+  getCursorCoordinate: PropTypes.func.isRequired,
 };
