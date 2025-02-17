@@ -15,7 +15,7 @@ function SpeakerPage() {
   return (
     <>
       <div className="flex grid-cols-2">
-        <div className="w-[60%] ml h-min border-4">
+        <div className="w-[80%] ml h-min border-4">
           <DocumentViewer
             pdfUrl={pdfUrl}
             getCursorCoordinate={getCursorCoordinate}
