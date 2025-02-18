@@ -1,4 +1,5 @@
 import Memo from "../PresentationMode/Memo";
+import Timer from "../PresentationMode/Timer";
 import DocumentViewer from "../ViewDocument/DocumentViewer";
 
 function SpeakerPage() {
@@ -14,6 +15,9 @@ function SpeakerPage() {
 
   return (
     <>
+      <div>
+        <Timer />
+      </div>
       <div className="flex">
         <div className="w-[80%] ml h-min border-4">
           <DocumentViewer
