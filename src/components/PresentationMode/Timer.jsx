@@ -4,7 +4,7 @@ import Button from "../Share/Button";
 
 function Timer() {
   const [currentTime, setCurrentTime] = useState(0);
-  const [isRunning, setIsRunning] = useState(true); // eslint-disable-line no-unused-vars
+  const [isRunning, setIsRunning] = useState(true);
   const intervalRef = useRef(null);
   const startTimeRef = useRef(0);
 
@@ -33,6 +33,11 @@ function Timer() {
     }
   }
 
+  function handleResetTimer() {
+    setCurrentTime(0);
+    setIsRunning(false);
+  }
+
   function formatTime() {
     let hours = Math.floor(currentTime / (1000 * 60 * 60));
     let minutes = Math.floor((currentTime / (1000 * 60)) % 60);
@@ -53,7 +58,10 @@ function Timer() {
           onClickEvent={handlePauseTimer}
           title={pauseButtonTitle}
         />
-        <Button title={resetButtonTitle} />
+        <Button
+          onClickEvent={handleResetTimer}
+          title={resetButtonTitle}
+        />
       </div>
     </>
   );
