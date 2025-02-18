@@ -1,36 +1,36 @@
 import { useEffect, useRef, useState } from "react";
 
 function Drawing() {
-  const [ctx, setCtx] = useState();
   const [isDrawing, setIsDrawing] = useState(false);
+  const [coordinate, setCoordinate] = useState({ x: 0, y: 0 }); // eslint-disable-line no-unused-vars
   const canvasRef = useRef(null);
-  const contextRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    canvas.width = innerWidth / 1.5;
+    canvas.height = innerHeight / 1.5;
 
     const context = canvas.getContext("2d");
     context.strokestyle = "black";
     context.lineWidth = 2.5;
-    contextRef.current = context;
-
-    setCtx(contextRef.current);
   }, []);
 
-  function handleDrawing(event) {
-    if (ctx) {
-      if (!isDrawing) {
-        ctx.beginPath();
-        ctx.moveTo(event.nativeEvent.offsetX, event.nativeEvent.offsetY);
-      } else {
-        ctx.lineTo(event.nativeEvent.offsetX, event.nativeEvent.offsetY);
-        ctx.stroke();
-      }
-    }
+  function handleStartDrawing(event) {
+    const startCoordinateX = event.nativeEvent.offsetX;
+    const startCoordinateY = event.nativeEvent.offsetY;
+
+    setIsDrawing(true);
+    setCoordinate({ x: startCoordinateX, y: startCoordinateY });
   }
 
-  function handleStartDrawing() {
-    setIsDrawing(true);
+  function handleDrawing(event) {
+    if (!isDrawing) {
+      return;
+    }
+
+    const finishCoordinateX = event.nativeEvent.offsetX;
+    const finishCoordinateY = event.nativeEvent.offsetY;
+    setCoordinate({ x: finishCoordinateX, y: finishCoordinateY });
   }
 
   function handleFinishDrawing() {
