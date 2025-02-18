@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 
 function Drawing() {
   const [isDrawing, setIsDrawing] = useState(false);
-  const [coordinate, setCoordinate] = useState({ x: 0, y: 0 }); // eslint-disable-line no-unused-vars
+  const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
+  const [coordinateList, setCoordinateList] = useState([]);
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -30,7 +31,17 @@ function Drawing() {
 
     const finishCoordinateX = event.nativeEvent.offsetX;
     const finishCoordinateY = event.nativeEvent.offsetY;
+    const saveCoordinate = {
+      startCoordinateX: coordinate.x,
+      startCoordinateY: coordinate.y,
+      finishCoordinateX: finishCoordinateX,
+      finishCoordinateY: finishCoordinateY,
+    };
+
+    setCoordinateList([...coordinateList, saveCoordinate]);
     setCoordinate({ x: finishCoordinateX, y: finishCoordinateY });
+
+    localStorage.setItem("coordinateList", coordinateList);
   }
 
   function handleFinishDrawing() {
