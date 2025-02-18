@@ -8,7 +8,8 @@ function Timer() {
   const intervalRef = useRef(null);
   const startTimeRef = useRef(0);
 
-  const buttonTitle = ["Pause", "Reset"];
+  const pauseButtonTitle = isRunning ? "Pause" : "Start";
+  const resetButtonTitle = "Reset";
 
   useEffect(() => {
     startTimeRef.current = Date.now() - currentTime;
@@ -24,6 +25,14 @@ function Timer() {
     };
   }, [isRunning]);
 
+  function handlePauseTimer() {
+    if (isRunning) {
+      setIsRunning(false);
+    } else {
+      setIsRunning(true);
+    }
+  }
+
   function formatTime() {
     let hours = Math.floor(currentTime / (1000 * 60 * 60));
     let minutes = Math.floor((currentTime / (1000 * 60)) % 60);
@@ -38,10 +47,13 @@ function Timer() {
 
   return (
     <>
-      <div className="flex">
+      <div className="flex gap-5">
         <div>{formatTime()}</div>
-        <Button title={buttonTitle[0]} />
-        <Button title={buttonTitle[1]} />
+        <Button
+          onClickEvent={handlePauseTimer}
+          title={pauseButtonTitle}
+        />
+        <Button title={resetButtonTitle} />
       </div>
     </>
   );
