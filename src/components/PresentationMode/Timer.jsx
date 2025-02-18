@@ -1,11 +1,28 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Button from "../Share/Button";
 
 function Timer() {
-  const [currentTime, setCurrentTime] = useState(0); // eslint-disable-line no-unused-vars
+  const [currentTime, setCurrentTime] = useState(0);
+  const [isRunning, setIsRunning] = useState(true); // eslint-disable-line no-unused-vars
+  const intervalRef = useRef(null);
+  const startTimeRef = useRef(0);
 
   const buttonTitle = ["Pause", "Reset"];
+
+  useEffect(() => {
+    startTimeRef.current = Date.now() - currentTime;
+
+    if (isRunning) {
+      intervalRef.current = setInterval(() => {
+        setCurrentTime(Date.now() - startTimeRef.current);
+      }, 10);
+    }
+
+    return () => {
+      clearInterval(intervalRef.current);
+    };
+  }, [isRunning]);
 
   function formatTime() {
     let hours = Math.floor(currentTime / (1000 * 60 * 60));
