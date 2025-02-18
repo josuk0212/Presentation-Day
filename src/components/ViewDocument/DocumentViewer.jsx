@@ -22,9 +22,9 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
 
   const documentViewerChannel = useMemo(() => {
     const channel = new BroadcastChannel("path");
-    channel.postMessage([pageNumber, moveIndex]);
+    channel.postMessage([pageNumber, moveIndex, totalPageNumber]);
     return channel;
-  }, [pageNumber, moveIndex]);
+  }, [pageNumber, moveIndex, totalPageNumber]);
 
   useEffect(() => {
     documentViewerChannel.onmessage = (shareState) => {
