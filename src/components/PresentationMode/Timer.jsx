@@ -8,6 +8,7 @@ function Timer() {
   const intervalRef = useRef(null);
   const startTimeRef = useRef(0);
 
+  const displayTime = formatTime();
   const pauseButtonTitle = isRunning ? "Pause" : "Start";
   const resetButtonTitle = "Reset";
 
@@ -52,16 +53,24 @@ function Timer() {
 
   return (
     <>
-      <div className="flex gap-5">
-        <div>{formatTime()}</div>
-        <Button
-          onClickEvent={handlePauseTimer}
-          title={pauseButtonTitle}
-        />
-        <Button
-          onClickEvent={handleResetTimer}
-          title={resetButtonTitle}
-        />
+      <div className="flex items-center ml-7">
+        <div className="w-[110px]">
+          <span className="font-extrabold text-2xl">{displayTime}</span>
+        </div>
+        <div className="flex ml-5 gap-4">
+          <div>
+            <Button
+              onClickEvent={handlePauseTimer}
+              title={pauseButtonTitle}
+            />
+          </div>
+          <div>
+            <Button
+              onClickEvent={handleResetTimer}
+              title={resetButtonTitle}
+            />
+          </div>
+        </div>
       </div>
     </>
   );
