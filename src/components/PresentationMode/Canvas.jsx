@@ -73,7 +73,7 @@ function Drawing() {
       onMouseDown={handleStartDrawing}
       onMouseMove={handleDrawing}
       onMouseLeave={handleFinishDrawing}
-      className="absolute w-min h-min z-50"
+      className="absolute w-min h-min z-10"
     ></canvas>
   );
 }
