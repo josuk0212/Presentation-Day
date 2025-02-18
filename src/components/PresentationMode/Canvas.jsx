@@ -1,10 +1,22 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 function Drawing() {
   const [isDrawing, setIsDrawing] = useState(false);
   const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
   const [coordinateList, setCoordinateList] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
   const canvasRef = useRef(null);
+
+  const canvasChannel = useMemo(() => {
+    const channel = new BroadcastChannel("path");
+    return channel;
+  }, []);
+
+  useEffect(() => {
+    canvasChannel.onmessage = (shareState) => {
+      setPageNumber(shareState.data);
+    };
+  }, [canvasChannel]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -15,7 +27,7 @@ function Drawing() {
     context.strokestyle = "black";
     context.lineWidth = 2.5;
 
-    drawCoordinate(context);
+    coordinateList && drawCoordinate(context);
   }, [coordinateList]);
 
   function handleStartDrawing(event) {
@@ -65,6 +77,15 @@ function Drawing() {
   function handleFinishDrawing() {
     setIsDrawing(false);
   }
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
+
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    localStorage.removeItem("coordinateList");
+    setCoordinateList([]);
+  }, [pageNumber]);
 
   return (
     <canvas
