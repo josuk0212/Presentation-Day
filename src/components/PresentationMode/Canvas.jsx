@@ -14,7 +14,9 @@ function Drawing() {
     const context = canvas.getContext("2d");
     context.strokestyle = "black";
     context.lineWidth = 2.5;
-  }, []);
+
+    drawCoordinate(context);
+  }, [coordinateList]);
 
   function handleStartDrawing(event) {
     const startCoordinateX = event.nativeEvent.offsetX;
@@ -41,7 +43,23 @@ function Drawing() {
     setCoordinateList([...coordinateList, saveCoordinate]);
     setCoordinate({ x: finishCoordinateX, y: finishCoordinateY });
 
-    localStorage.setItem("coordinateList", coordinateList);
+    localStorage.setItem("coordinateList", JSON.stringify(coordinateList));
+  }
+
+  addEventListener("storage", () => {
+    const savedCoordinateList = JSON.parse(
+      localStorage.getItem("coordinateList")
+    );
+    setCoordinateList(savedCoordinateList);
+  });
+
+  function drawCoordinate(context) {
+    coordinateList.forEach((coord) => {
+      context.beginPath();
+      context.moveTo(coord.startCoordinateX, coord.startCoordinateY);
+      context.lineTo(coord.finishCoordinateX, coord.finishCoordinateY);
+      context.stroke();
+    });
   }
 
   function handleFinishDrawing() {
