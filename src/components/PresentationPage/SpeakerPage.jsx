@@ -9,6 +9,7 @@ function SpeakerPage() {
     useOnOffStore();
   const pdfUrl = localStorage.getItem("pdfUrl");
   const drawButtonTitle = ["🖍️", "🧽"];
+  const closeButtonTitle = "X";
 
   function getCursorCoordinate(event) {
     const coordX = event.nativeEvent.offsetX;
@@ -36,7 +37,7 @@ function SpeakerPage() {
         <div>
           <Timer />
         </div>
-        <div className="flex ml-11 gap-4">
+        <div className="flex ml-[630px] gap-4">
           <Button
             onClickEvent={handleDrawingToggle}
             title={drawButtonTitle[0]}
@@ -45,6 +46,7 @@ function SpeakerPage() {
             onClickEvent={handleClearDrawing}
             title={drawButtonTitle[1]}
           />
+          <Button title={closeButtonTitle} />
         </div>
       </div>
       <div className="flex">
