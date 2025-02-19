@@ -1,41 +1,127 @@
-import { useEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-function Drawing() {
-  const [ctx, setCtx] = useState();
+import useOnOffStore from "../../stores/useOnOffStore";
+
+function Drawing({ pdfRef }) {
   const [isDrawing, setIsDrawing] = useState(false);
+  const [isShowDrawing, setIsShowDrawing] = useState(false);
+  const [isResetDrawing, setIsResetDrawing] = useState(false);
+  const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
+  const [coordinateList, setCoordinateList] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const { isDisplayDrawing, isClearDrawing, setIsClearDrawing } =
+    useOnOffStore();
   const canvasRef = useRef(null);
-  const contextRef = useRef(null);
+
+  const canvasChannel = useMemo(() => {
+    const channel = new BroadcastChannel("path");
+    return channel;
+  }, []);
+
+  const toggleChannel = useMemo(() => {
+    const channel = new BroadcastChannel("toggle");
+    channel.postMessage([isDisplayDrawing, isClearDrawing]);
+    return channel;
+  }, [isDisplayDrawing, isClearDrawing]);
 
   useEffect(() => {
+    canvasChannel.onmessage = (shareState) => {
+      setPageNumber(shareState.data);
+    };
+
+    toggleChannel.onmessage = (shareState) => {
+      setIsShowDrawing(shareState.data[0]);
+      setIsResetDrawing(shareState.data[1]);
+    };
+  }, [canvasChannel, toggleChannel]);
+
+  useEffect(() => {
+    if (!pdfRef.current) {
+      return;
+    }
     const canvas = canvasRef.current;
+    canvas.width = pdfRef.current.width;
+    canvas.height = pdfRef.current.height;
 
     const context = canvas.getContext("2d");
     context.strokestyle = "black";
     context.lineWidth = 2.5;
-    contextRef.current = context;
 
-    setCtx(contextRef.current);
-  }, []);
+    coordinateList && drawCoordinate(context);
+  }, [coordinateList, pdfRef]);
 
-  function handleDrawing(event) {
-    if (ctx) {
-      if (!isDrawing) {
-        ctx.beginPath();
-        ctx.moveTo(event.nativeEvent.offsetX, event.nativeEvent.offsetY);
-      } else {
-        ctx.lineTo(event.nativeEvent.offsetX, event.nativeEvent.offsetY);
-        ctx.stroke();
-      }
+  function handleStartDrawing(event) {
+    if (!isShowDrawing) {
+      return;
+    } else {
+      const startCoordinateX = event.nativeEvent.offsetX;
+      const startCoordinateY = event.nativeEvent.offsetY;
+
+      setIsDrawing(true);
+      setCoordinate({ x: startCoordinateX, y: startCoordinateY });
     }
   }
 
-  function handleStartDrawing() {
-    setIsDrawing(true);
+  function handleDrawing(event) {
+    if (!isDrawing) {
+      return;
+    }
+
+    const finishCoordinateX = event.nativeEvent.offsetX;
+    const finishCoordinateY = event.nativeEvent.offsetY;
+    const saveCoordinate = {
+      startCoordinateX: coordinate.x,
+      startCoordinateY: coordinate.y,
+      finishCoordinateX: finishCoordinateX,
+      finishCoordinateY: finishCoordinateY,
+    };
+
+    setCoordinateList([...coordinateList, saveCoordinate]);
+    setCoordinate({ x: finishCoordinateX, y: finishCoordinateY });
+    localStorage.setItem("coordinateList", JSON.stringify(coordinateList));
+  }
+
+  addEventListener("storage", () => {
+    const savedCoordinateList = JSON.parse(
+      localStorage.getItem("coordinateList")
+    );
+    setCoordinateList(savedCoordinateList);
+  });
+
+  function drawCoordinate(context) {
+    coordinateList.forEach((coord) => {
+      context.beginPath();
+      context.moveTo(coord.startCoordinateX, coord.startCoordinateY);
+      context.lineTo(coord.finishCoordinateX, coord.finishCoordinateY);
+      context.stroke();
+    });
   }
 
   function handleFinishDrawing() {
     setIsDrawing(false);
   }
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
+
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    localStorage.removeItem("coordinateList");
+    setCoordinateList([]);
+  }, [pageNumber]);
+
+  useEffect(() => {
+    if (isResetDrawing) {
+      const canvas = canvasRef.current;
+      const context = canvas.getContext("2d");
+
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      localStorage.removeItem("coordinateList");
+      setCoordinateList([]);
+      setIsClearDrawing(false);
+    }
+  }, [isResetDrawing]);
 
   return (
     <canvas
@@ -44,9 +130,13 @@ function Drawing() {
       onMouseDown={handleStartDrawing}
       onMouseMove={handleDrawing}
       onMouseLeave={handleFinishDrawing}
-      className="absolute w-min h-min z-50"
+      className="absolute z-10"
     ></canvas>
   );
 }
 
 export default Drawing;
+
+Drawing.propTypes = {
+  pdfRef: PropTypes.object.isRequired,
+};

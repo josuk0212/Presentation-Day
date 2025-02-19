@@ -26,7 +26,7 @@ function Modal({ setIsModal }) {
 
   return (
     <>
-      <div className="fixed top-0 z-10 flex justify-center items-center w-screen h-full bg-modalbg bg-opacity-50 backdrop-blur-sm">
+      <div className="fixed top-0 z-20 flex justify-center items-center w-screen h-full bg-modalbg bg-opacity-50 backdrop-blur-sm">
         <div className="card w-96 h-48 bg-white">
           <div className="absolute top-0 right-0 mt-3 mr-3">
             <Button
