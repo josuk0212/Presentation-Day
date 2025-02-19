@@ -5,9 +5,10 @@ import Button from "../Share/Button";
 import DocumentViewer from "../ViewDocument/DocumentViewer";
 
 function SpeakerPage() {
-  const { isDisplayDrawing, setIsDisplayDrawing } = useOnOffStore();
+  const { isDisplayDrawing, setIsDisplayDrawing, setIsClearDrawing } =
+    useOnOffStore();
   const pdfUrl = localStorage.getItem("pdfUrl");
-  const drawButtonTitle = "🖍️";
+  const drawButtonTitle = ["🖍️", "🧽"];
 
   function getCursorCoordinate(event) {
     const coordX = event.nativeEvent.offsetX;
@@ -25,16 +26,24 @@ function SpeakerPage() {
     }
   }
 
+  function handleClearDrawing() {
+    setIsClearDrawing(true);
+  }
+
   return (
     <>
       <div className="flex">
         <div>
           <Timer />
         </div>
-        <div className="ml-11">
+        <div className="flex ml-11 gap-4">
           <Button
             onClickEvent={handleDrawingToggle}
-            title={drawButtonTitle}
+            title={drawButtonTitle[0]}
+          />
+          <Button
+            onClickEvent={handleClearDrawing}
+            title={drawButtonTitle[1]}
           />
         </div>
       </div>

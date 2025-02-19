@@ -4,11 +4,13 @@ import useOnOffStore from "../../stores/useOnOffStore";
 
 function Drawing() {
   const [isDrawing, setIsDrawing] = useState(false);
-  const [isShowDrawing, setIsShowDrawing] = useState(null);
+  const [isShowDrawing, setIsShowDrawing] = useState(false);
+  const [isResetDrawing, setIsResetDrawing] = useState(false);
   const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
   const [coordinateList, setCoordinateList] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
-  const { isDisplayDrawing } = useOnOffStore();
+  const { isDisplayDrawing, isClearDrawing, setIsClearDrawing } =
+    useOnOffStore();
   const canvasRef = useRef(null);
 
   const canvasChannel = useMemo(() => {
@@ -18,16 +20,18 @@ function Drawing() {
 
   const toggleChannel = useMemo(() => {
     const channel = new BroadcastChannel("toggle");
-    channel.postMessage(isDisplayDrawing);
+    channel.postMessage([isDisplayDrawing, isClearDrawing]);
     return channel;
-  }, [isDisplayDrawing]);
+  }, [isDisplayDrawing, isClearDrawing]);
 
   useEffect(() => {
     canvasChannel.onmessage = (shareState) => {
       setPageNumber(shareState.data);
     };
+
     toggleChannel.onmessage = (shareState) => {
-      setIsShowDrawing(shareState.data);
+      setIsShowDrawing(shareState.data[0]);
+      setIsResetDrawing(shareState.data[1]);
     };
   }, [canvasChannel, toggleChannel]);
 
@@ -71,7 +75,6 @@ function Drawing() {
 
     setCoordinateList([...coordinateList, saveCoordinate]);
     setCoordinate({ x: finishCoordinateX, y: finishCoordinateY });
-
     localStorage.setItem("coordinateList", JSON.stringify(coordinateList));
   }
 
@@ -103,6 +106,18 @@ function Drawing() {
     localStorage.removeItem("coordinateList");
     setCoordinateList([]);
   }, [pageNumber]);
+
+  useEffect(() => {
+    if (isResetDrawing) {
+      const canvas = canvasRef.current;
+      const context = canvas.getContext("2d");
+
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      localStorage.removeItem("coordinateList");
+      setCoordinateList([]);
+      setIsClearDrawing(false);
+    }
+  }, [isResetDrawing]);
 
   return (
     <canvas
