@@ -1,10 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
+import useOnOffStore from "../../stores/useOnOffStore";
+
 function Drawing() {
   const [isDrawing, setIsDrawing] = useState(false);
+  const [isShowDrawing, setIsShowDrawing] = useState(null);
   const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
   const [coordinateList, setCoordinateList] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
+  const { isDisplayDrawing } = useOnOffStore();
   const canvasRef = useRef(null);
 
   const canvasChannel = useMemo(() => {
@@ -12,11 +16,20 @@ function Drawing() {
     return channel;
   }, []);
 
+  const toggleChannel = useMemo(() => {
+    const channel = new BroadcastChannel("toggle");
+    channel.postMessage(isDisplayDrawing);
+    return channel;
+  }, [isDisplayDrawing]);
+
   useEffect(() => {
     canvasChannel.onmessage = (shareState) => {
       setPageNumber(shareState.data);
     };
-  }, [canvasChannel]);
+    toggleChannel.onmessage = (shareState) => {
+      setIsShowDrawing(shareState.data);
+    };
+  }, [canvasChannel, toggleChannel]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -31,11 +44,15 @@ function Drawing() {
   }, [coordinateList]);
 
   function handleStartDrawing(event) {
-    const startCoordinateX = event.nativeEvent.offsetX;
-    const startCoordinateY = event.nativeEvent.offsetY;
+    if (!isShowDrawing) {
+      return;
+    } else {
+      const startCoordinateX = event.nativeEvent.offsetX;
+      const startCoordinateY = event.nativeEvent.offsetY;
 
-    setIsDrawing(true);
-    setCoordinate({ x: startCoordinateX, y: startCoordinateY });
+      setIsDrawing(true);
+      setCoordinate({ x: startCoordinateX, y: startCoordinateY });
+    }
   }
 
   function handleDrawing(event) {
