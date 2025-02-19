@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -19,6 +19,7 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
   const [pageNumber, setPageNumber] = useState(1);
   const [moveIndex, setMoveIndex] = useState(0);
   const { isFullScreen, isOpenSpeakerPage } = useOnOffStore();
+  const pdfRef = useRef(null);
 
   const documentViewerChannel = useMemo(() => {
     const channel = new BroadcastChannel("path");
@@ -86,7 +87,7 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
           onMouseMove={getCursorCoordinate}
           className="flex justify-center w-min h-min"
         >
-          <Drawing />
+          <Drawing pdfRef={pdfRef} />
           <Document
             file={pdfUrl}
             onLoadSuccess={onLoadSuccess}
@@ -94,6 +95,7 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
             className="m-auto border-2"
           >
             <Page
+              canvasRef={pdfRef}
               pageNumber={pageNumber}
               scale={isFullScreen ? "1.5" : "0.5"}
             />

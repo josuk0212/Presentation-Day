@@ -1,8 +1,9 @@
+import PropTypes from "prop-types";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import useOnOffStore from "../../stores/useOnOffStore";
 
-function Drawing() {
+function Drawing({ pdfRef }) {
   const [isDrawing, setIsDrawing] = useState(false);
   const [isShowDrawing, setIsShowDrawing] = useState(false);
   const [isResetDrawing, setIsResetDrawing] = useState(false);
@@ -36,16 +37,19 @@ function Drawing() {
   }, [canvasChannel, toggleChannel]);
 
   useEffect(() => {
+    if (!pdfRef.current) {
+      return;
+    }
     const canvas = canvasRef.current;
-    canvas.width = innerWidth / 1.5;
-    canvas.height = innerHeight / 1.5;
+    canvas.width = pdfRef.current.width;
+    canvas.height = pdfRef.current.height;
 
     const context = canvas.getContext("2d");
     context.strokestyle = "black";
     context.lineWidth = 2.5;
 
     coordinateList && drawCoordinate(context);
-  }, [coordinateList]);
+  }, [coordinateList, pdfRef]);
 
   function handleStartDrawing(event) {
     if (!isShowDrawing) {
@@ -126,9 +130,13 @@ function Drawing() {
       onMouseDown={handleStartDrawing}
       onMouseMove={handleDrawing}
       onMouseLeave={handleFinishDrawing}
-      className="absolute w-min h-min z-10"
+      className="absolute z-10"
     ></canvas>
   );
 }
 
 export default Drawing;
+
+Drawing.propTypes = {
+  pdfRef: PropTypes.object.isRequired,
+};
