@@ -31,6 +31,10 @@ function SpeakerPage() {
     setIsClearDrawing(true);
   }
 
+  function handleCloseSpeakerPage() {
+    window.close();
+  }
+
   return (
     <>
       <div className="flex">
@@ -46,7 +50,10 @@ function SpeakerPage() {
             onClickEvent={handleClearDrawing}
             title={drawButtonTitle[1]}
           />
-          <Button title={closeButtonTitle} />
+          <Button
+            onClickEvent={handleCloseSpeakerPage}
+            title={closeButtonTitle}
+          />
         </div>
       </div>
       <div className="flex">
