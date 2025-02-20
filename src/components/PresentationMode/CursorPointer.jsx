@@ -1,25 +1,28 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 
-function CursorPointer() {
+function CursorPointer({ pdfRef }) {
   const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
+
+  const audiencPageViewerCoodinate = pdfRef.current.getBoundingClientRect();
 
   addEventListener("storage", () => {
     const coordX = Number(localStorage.getItem("coordX"));
     const coordY = Number(localStorage.getItem("coordY"));
 
-    setCoordinate({ x: coordX * 4, y: coordY * 2.9 });
+    setCoordinate({ x: coordX, y: coordY });
   });
 
   return (
     <div
       style={{
         position: "absolute",
-        width: "2rem",
-        height: "2rem",
+        width: "1rem",
+        height: "1rem",
         background: "red",
-        left: `${coordinate.x}px`,
-        top: `${coordinate.y}px`,
+        opacity: "0.5",
+        left: `${coordinate.x + audiencPageViewerCoodinate.x - 10}px`,
+        top: `${coordinate.y + audiencPageViewerCoodinate.y - 10}px`,
       }}
     ></div>
   );
@@ -28,5 +31,5 @@ function CursorPointer() {
 export default CursorPointer;
 
 CursorPointer.propTypes = {
-  coordinate: PropTypes.object.isRequired,
+  pdfRef: PropTypes.object.isRequired,
 };

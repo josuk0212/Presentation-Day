@@ -99,7 +99,7 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
               pageNumber={pageNumber}
             />
           </Document>
-          {isOpenSpeakerPage && <CursorPointer />}
+          {isOpenSpeakerPage && <CursorPointer pdfRef={pdfRef} />}
         </div>
       </div>
       <div className="flex justify-center">
