@@ -10,8 +10,12 @@ function Drawing({ pdfRef }) {
   const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
   const [coordinateList, setCoordinateList] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
-  const { isDisplayDrawing, isClearDrawing, setIsClearDrawing } =
-    useOnOffStore();
+  const {
+    isDisplayDrawing,
+    isClearDrawing,
+    isOpenSpeakerPage,
+    setIsClearDrawing,
+  } = useOnOffStore();
   const canvasRef = useRef(null);
 
   const canvasChannel = useMemo(() => {
@@ -110,7 +114,7 @@ function Drawing({ pdfRef }) {
     context.clearRect(0, 0, canvas.width, canvas.height);
     localStorage.removeItem("coordinateList");
     setCoordinateList([]);
-  }, [pageNumber]);
+  }, [pageNumber, isOpenSpeakerPage]);
 
   useEffect(() => {
     if (isResetDrawing) {
