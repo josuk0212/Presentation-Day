@@ -15,12 +15,8 @@ function CursorPointer({ pdfRef }) {
 
   return (
     <div
+      className="absolute w-5 h-5 bg-red-700 opacity-50 rounded-full"
       style={{
-        position: "absolute",
-        width: "1rem",
-        height: "1rem",
-        background: "red",
-        opacity: "0.5",
         left: `${coordinate.x + audiencPageViewerCoodinate.x - 10}px`,
         top: `${coordinate.y + audiencPageViewerCoodinate.y - 10}px`,
       }}
