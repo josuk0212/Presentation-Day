@@ -40,9 +40,10 @@ function Drawing({ pdfRef }) {
     if (!pdfRef.current) {
       return;
     }
+    const pdfSize = pdfRef.current.getBoundingClientRect();
     const canvas = canvasRef.current;
-    canvas.width = pdfRef.current.width;
-    canvas.height = pdfRef.current.height;
+    canvas.width = pdfSize.width;
+    canvas.height = pdfSize.height;
 
     const context = canvas.getContext("2d");
     context.strokestyle = "black";
