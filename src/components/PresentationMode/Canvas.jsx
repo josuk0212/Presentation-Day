@@ -10,8 +10,13 @@ function Drawing({ pdfRef }) {
   const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
   const [coordinateList, setCoordinateList] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
-  const { isDisplayDrawing, isClearDrawing, setIsClearDrawing } =
-    useOnOffStore();
+  const {
+    isDisplayDrawing,
+    isClearDrawing,
+    isOpenSpeakerPage,
+    isFullScreen,
+    setIsClearDrawing,
+  } = useOnOffStore();
   const canvasRef = useRef(null);
 
   const canvasChannel = useMemo(() => {
@@ -40,9 +45,10 @@ function Drawing({ pdfRef }) {
     if (!pdfRef.current) {
       return;
     }
+    const pdfSize = pdfRef.current.getBoundingClientRect();
     const canvas = canvasRef.current;
-    canvas.width = pdfRef.current.width;
-    canvas.height = pdfRef.current.height;
+    canvas.width = pdfSize.width;
+    canvas.height = pdfSize.height;
 
     const context = canvas.getContext("2d");
     context.strokestyle = "black";
@@ -90,12 +96,24 @@ function Drawing({ pdfRef }) {
   });
 
   function drawCoordinate(context) {
-    coordinateList.forEach((coord) => {
-      context.beginPath();
-      context.moveTo(coord.startCoordinateX, coord.startCoordinateY);
-      context.lineTo(coord.finishCoordinateX, coord.finishCoordinateY);
-      context.stroke();
-    });
+    if (!isFullScreen) {
+      coordinateList.forEach((coord) => {
+        context.beginPath();
+        context.moveTo(coord.startCoordinateX, coord.startCoordinateY);
+        context.lineTo(coord.finishCoordinateX, coord.finishCoordinateY);
+        context.stroke();
+      });
+    } else {
+      coordinateList.forEach((coord) => {
+        context.beginPath();
+        context.moveTo(coord.startCoordinateX * 2, coord.startCoordinateY * 2);
+        context.lineTo(
+          coord.finishCoordinateX * 2,
+          coord.finishCoordinateY * 2
+        );
+        context.stroke();
+      });
+    }
   }
 
   function handleFinishDrawing() {
@@ -109,7 +127,7 @@ function Drawing({ pdfRef }) {
     context.clearRect(0, 0, canvas.width, canvas.height);
     localStorage.removeItem("coordinateList");
     setCoordinateList([]);
-  }, [pageNumber]);
+  }, [pageNumber, isOpenSpeakerPage]);
 
   useEffect(() => {
     if (isResetDrawing) {
