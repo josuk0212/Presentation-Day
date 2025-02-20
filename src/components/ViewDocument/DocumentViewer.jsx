@@ -18,7 +18,7 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
   const [totalPageNumber, setTotalPageNumber] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [moveIndex, setMoveIndex] = useState(0);
-  const { isFullScreen, isOpenSpeakerPage } = useOnOffStore();
+  const { isOpenSpeakerPage } = useOnOffStore();
   const pdfRef = useRef(null);
 
   const documentViewerChannel = useMemo(() => {
@@ -87,17 +87,16 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
           onMouseMove={getCursorCoordinate}
           className="flex justify-center w-min h-min"
         >
-          <Drawing pdfRef={pdfRef} />
           <Document
             file={pdfUrl}
             onLoadSuccess={onLoadSuccess}
             loading={handleChangeLoadingText}
             className="m-auto border-2"
           >
+            <Drawing pdfRef={pdfRef} />
             <Page
               canvasRef={pdfRef}
               pageNumber={pageNumber}
-              scale={isFullScreen ? "1.5" : "0.5"}
             />
           </Document>
           {isOpenSpeakerPage && <CursorPointer />}
