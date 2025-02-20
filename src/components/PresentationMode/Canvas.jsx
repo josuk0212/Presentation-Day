@@ -14,6 +14,7 @@ function Drawing({ pdfRef }) {
     isDisplayDrawing,
     isClearDrawing,
     isOpenSpeakerPage,
+    isFullScreen,
     setIsClearDrawing,
   } = useOnOffStore();
   const canvasRef = useRef(null);
@@ -95,12 +96,24 @@ function Drawing({ pdfRef }) {
   });
 
   function drawCoordinate(context) {
-    coordinateList.forEach((coord) => {
-      context.beginPath();
-      context.moveTo(coord.startCoordinateX, coord.startCoordinateY);
-      context.lineTo(coord.finishCoordinateX, coord.finishCoordinateY);
-      context.stroke();
-    });
+    if (!isFullScreen) {
+      coordinateList.forEach((coord) => {
+        context.beginPath();
+        context.moveTo(coord.startCoordinateX, coord.startCoordinateY);
+        context.lineTo(coord.finishCoordinateX, coord.finishCoordinateY);
+        context.stroke();
+      });
+    } else {
+      coordinateList.forEach((coord) => {
+        context.beginPath();
+        context.moveTo(coord.startCoordinateX * 2, coord.startCoordinateY * 2);
+        context.lineTo(
+          coord.finishCoordinateX * 2,
+          coord.finishCoordinateY * 2
+        );
+        context.stroke();
+      });
+    }
   }
 
   function handleFinishDrawing() {
