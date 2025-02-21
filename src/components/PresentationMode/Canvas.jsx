@@ -49,8 +49,32 @@ function Drawing({ pdfRef }) {
     context.strokestyle = "black";
     context.lineWidth = 2.5;
 
+    function drawCoordinate(context) {
+      if (!isFullScreen) {
+        coordinateList.forEach((coord) => {
+          context.beginPath();
+          context.moveTo(coord.startCoordinateX, coord.startCoordinateY);
+          context.lineTo(coord.finishCoordinateX, coord.finishCoordinateY);
+          context.stroke();
+        });
+      } else {
+        coordinateList.forEach((coord) => {
+          context.beginPath();
+          context.moveTo(
+            coord.startCoordinateX * 2,
+            coord.startCoordinateY * 2
+          );
+          context.lineTo(
+            coord.finishCoordinateX * 2,
+            coord.finishCoordinateY * 2
+          );
+          context.stroke();
+        });
+      }
+    }
+
     coordinateList && drawCoordinate(context);
-  }, [coordinateList, pdfRef]);
+  }, [coordinateList, pdfRef, isFullScreen]);
 
   function handleStartDrawing(event) {
     if (!isShowDrawing) {
@@ -97,27 +121,6 @@ function Drawing({ pdfRef }) {
       removeEventListener("storage", getDrawingData);
     };
   }, []);
-
-  function drawCoordinate(context) {
-    if (!isFullScreen) {
-      coordinateList.forEach((coord) => {
-        context.beginPath();
-        context.moveTo(coord.startCoordinateX, coord.startCoordinateY);
-        context.lineTo(coord.finishCoordinateX, coord.finishCoordinateY);
-        context.stroke();
-      });
-    } else {
-      coordinateList.forEach((coord) => {
-        context.beginPath();
-        context.moveTo(coord.startCoordinateX * 2, coord.startCoordinateY * 2);
-        context.lineTo(
-          coord.finishCoordinateX * 2,
-          coord.finishCoordinateY * 2
-        );
-        context.stroke();
-      });
-    }
-  }
 
   function handleFinishDrawing() {
     setIsDrawing(false);
