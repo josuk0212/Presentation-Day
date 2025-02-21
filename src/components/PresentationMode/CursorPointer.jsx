@@ -19,7 +19,7 @@ function CursorPointer({ pdfRef }) {
     return () => {
       removeEventListener("storage", getCursorCoordinate);
     };
-  });
+  }, []);
 
   return (
     <div
