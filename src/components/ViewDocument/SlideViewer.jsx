@@ -1,7 +1,5 @@
 import PropTypes from "prop-types";
 import { Document, Page, pdfjs } from "react-pdf";
-import "react-pdf/dist/Page/AnnotationLayer.css";
-import "react-pdf/dist/Page/TextLayer.css";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
@@ -40,6 +38,8 @@ function SlideViewer({
                   <Page
                     key={`page_${index + 1}`}
                     pageNumber={index + 1}
+                    renderTextLayer={false}
+                    renderAnnotationLayer={false}
                     width="150"
                     className={
                       index + 1 === pageNumber
