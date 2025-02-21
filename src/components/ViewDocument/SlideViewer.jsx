@@ -38,7 +38,7 @@ function SlideViewer({
               return (
                 index <= totalPageNumber && (
                   <Page
-                    key={index}
+                    key={`page_${index + 1}`}
                     pageNumber={index + 1}
                     width="150"
                     className={
