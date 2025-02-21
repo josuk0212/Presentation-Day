@@ -88,12 +88,20 @@ function Drawing({ pdfRef }) {
     localStorage.setItem("coordinateList", JSON.stringify(coordinateList));
   }
 
-  addEventListener("storage", () => {
-    const savedCoordinateList = JSON.parse(
-      localStorage.getItem("coordinateList")
-    );
-    setCoordinateList(savedCoordinateList);
-  });
+  useEffect(() => {
+    function getDrawingData() {
+      const savedCoordinateList = JSON.parse(
+        localStorage.getItem("coordinateList")
+      );
+      setCoordinateList(savedCoordinateList);
+    }
+
+    addEventListener("storage", getDrawingData);
+
+    return () => {
+      removeEventListener("storage", getDrawingData);
+    };
+  }, []);
 
   function drawCoordinate(context) {
     if (!isFullScreen) {
