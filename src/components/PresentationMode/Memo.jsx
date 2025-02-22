@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-import Button from "../Share/Button";
+import { WhiteButton } from "../Share/Button";
 
 function Memo() {
   const [fontSize, setFontSize] = useState(20);
@@ -67,38 +67,44 @@ function Memo() {
   }, [pageNumber, memoList]);
 
   return (
-    <>
-      <div>
-        <form
-          method="post"
-          onSubmit={handleSaveMemo}
-        >
-          <label className="w-min h-min">
+    <div>
+      <form
+        method="post"
+        onSubmit={handleSaveMemo}
+      >
+        <div>
+          <label>
             <textarea
               name={pageNumber}
               placeholder="글자를 입력해주세요"
               value={memo}
               onChange={handleWriteMemo}
               className={
-                "textarea textarea-bordered resize-none w-[250px] h-[500px]"
+                "textarea textarea-bordered resize-none w-[300px] h-[850px] bg-third text-white opacity-40"
               }
               style={{ fontSize: `${fontSize}px` }}
             ></textarea>
           </label>
-          <div className="flex-col">
-            <Button
-              title={buttonTitle[0]}
-              onClickEvent={handleIncreaseFontSize}
-            />
-            <Button
-              title={buttonTitle[1]}
-              onClickEvent={handleDecreaseFontSize}
-            />
-            <button className="btn">Save Memo</button>
+        </div>
+        <div className="flex gap-[34%]">
+          <div className="flex gap-[10%]">
+            <div>
+              <WhiteButton
+                title={buttonTitle[0]}
+                onClickEvent={handleIncreaseFontSize}
+              />
+            </div>
+            <div>
+              <WhiteButton
+                title={buttonTitle[1]}
+                onClickEvent={handleDecreaseFontSize}
+              />
+            </div>
           </div>
-        </form>
-      </div>
-    </>
+          <button className="btn btn-outline text-white">Save Memo</button>
+        </div>
+      </form>
+    </div>
   );
 }
 

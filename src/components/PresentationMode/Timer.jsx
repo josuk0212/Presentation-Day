@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import Button from "../Share/Button";
+import { WhiteButton } from "../Share/Button";
 
 function Timer() {
   const [currentTime, setCurrentTime] = useState(0);
@@ -55,17 +55,19 @@ function Timer() {
     <>
       <div className="flex items-center ml-7">
         <div className="w-[110px]">
-          <span className="font-extrabold text-2xl">{displayTime}</span>
+          <span className="font-extrabold text-2xl text-white">
+            {displayTime}
+          </span>
         </div>
         <div className="flex ml-5 gap-4">
           <div>
-            <Button
+            <WhiteButton
               onClickEvent={handlePauseTimer}
               title={pauseButtonTitle}
             />
           </div>
           <div>
-            <Button
+            <WhiteButton
               onClickEvent={handleResetTimer}
               title={resetButtonTitle}
             />

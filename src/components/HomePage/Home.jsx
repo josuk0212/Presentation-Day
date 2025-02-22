@@ -4,7 +4,7 @@ import useFileStore from "../../stores/useFileStore";
 import useOnOffStore from "../../stores/useOnOffStore";
 import FileUpload from "../FileUpload/FileUpload";
 import Modal from "../PresentationMode/Modal";
-import Button from "../Share/Button";
+import { BlackButton } from "../Share/Button";
 import DocumentViewer from "../ViewDocument/DocumentViewer";
 
 function Home() {
@@ -21,17 +21,41 @@ function Home() {
   }
 
   return (
-    <>
-      <h1 className="flex justify-center text-5xl mt-16">Welcome HP</h1>
-      <div className="flex justify-center text-2xl mt-6">Help Presentation</div>
+    <div className="w-screen h-screen bg-background">
+      <div className="flex flex-col justify-center items-center h-36 bg-primary">
+        <h1 className="text-white text-5xl">Welcome HP</h1>
+        <div className="text-white text-2xl">Help Presentation</div>
+      </div>
       {isModal && <Modal setIsModal={setIsModal} />}
-      <FileUpload />
-      {pdfUrl && <DocumentViewer pdfUrl={pdfUrl} />}
-      <Button
-        onClickEvent={handlePresentationMode}
-        title={buttonTitle}
-      />
-    </>
+      <div className="flex justify-center items-center w-full h-full bg-background">
+        <div>
+          <div className="flex items-center gap-20">
+            {pdfUrl && (
+              <div className="border-4 rounded-xl bg-white border-primary">
+                <div className="mt-10 mr-10 ml-20 mb-10">
+                  <DocumentViewer pdfUrl={pdfUrl} />
+                </div>
+              </div>
+            )}
+            <div className="flex flex-col justify-center items-center w-full h-full">
+              <div className="flex flex-col gap-36">
+                <div>
+                  <FileUpload />
+                </div>
+                <div className="flex justify-center">
+                  {pdfUrl && (
+                    <BlackButton
+                      onClickEvent={handlePresentationMode}
+                      title={buttonTitle}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

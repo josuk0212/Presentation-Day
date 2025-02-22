@@ -43,8 +43,8 @@ function SlideViewer({
                     width="150"
                     className={
                       index + 1 === pageNumber
-                        ? "border-8 border-primary"
-                        : "border-2"
+                        ? "border-8 rounded-xl border-primary"
+                        : "border-2 rounded"
                     }
                     onClick={handleMovePage}
                   />

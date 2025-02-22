@@ -89,7 +89,7 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
             file={pdfUrl}
             onLoadSuccess={onLoadSuccess}
             loading={handleChangeLoadingText}
-            className="m-auto border-2"
+            className="m-auto border-2 border-primary"
           >
             <Drawing pdfRef={pdfRef} />
             <Page
@@ -103,18 +103,17 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
           {isOpenSpeakerPage && <CursorPointer pdfRef={pdfRef} />}
         </div>
       </div>
-      <div className="flex justify-center">
-        Page {pageNumber} of {totalPageNumber}
-      </div>
       {totalPageNumber !== 1 && (
-        <div className="flex justify-center">
-          <button
-            className="btn btn-outline"
-            onClick={handlePreviousPage}
-          >
-            이전
-          </button>
-          <div className="flex w-[1010px] overflow-hidden">
+        <div className="flex justify-center mt-5">
+          <div className="flex items-center mr-3">
+            <button
+              className="btn btn-ghost text-2xl"
+              onClick={handlePreviousPage}
+            >
+              ←
+            </button>
+          </div>
+          <div className="flex w-[1020px] overflow-hidden">
             <div style={{ transform: `translateX(${moveIndex}px)` }}>
               <SlideViewer
                 pdfUrl={pdfUrl}
@@ -125,14 +124,19 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
               />
             </div>
           </div>
-          <button
-            className="btn btn-outline"
-            onClick={handleNextPage}
-          >
-            다음
-          </button>
+          <div className="flex items-center">
+            <button
+              className="btn btn-ghost text-2xl"
+              onClick={handleNextPage}
+            >
+              →
+            </button>
+          </div>
         </div>
       )}
+      <div className="flex justify-center mt-2">
+        {pageNumber} / {totalPageNumber} Page
+      </div>
     </>
   );
 }

@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 import useOnOffStore from "../../stores/useOnOffStore";
-import Button from "../Share/Button";
+import { BlackButton } from "../Share/Button";
 
 function Modal({ setIsModal }) {
   const { setIsFullScreen, setIsOpenSpeakerpage } = useOnOffStore();
@@ -30,7 +30,7 @@ function Modal({ setIsModal }) {
       <div className="fixed top-0 z-20 flex justify-center items-center w-screen h-full bg-modalbg bg-opacity-50 backdrop-blur-sm">
         <div className="card w-96 h-48 bg-white">
           <div className="absolute top-0 right-0 mt-3 mr-3">
-            <Button
+            <BlackButton
               onClickEvent={closeModal}
               title={closeButtonTitle}
             />
@@ -42,7 +42,7 @@ function Modal({ setIsModal }) {
             </p>
           </span>
           <div className="absolute bottom-0 right-0 mb-3 mr-3">
-            <Button
+            <BlackButton
               onClickEvent={viewFullScreen}
               title={viewButtonTitle}
             />
