@@ -23,11 +23,9 @@ function Home() {
   return (
     <>
       <div>
-        <div>
-          <h1 className="flex justify-center text-5xl mt-16">Welcome HP</h1>
-          <div className="flex justify-center text-2xl mt-6">
-            Help Presentation
-          </div>
+        <div className="flex flex-col justify-center items-center h-48 bg-primary">
+          <h1 className="text-5xl">Welcome HP</h1>
+          <div className="text-2xl">Help Presentation</div>
         </div>
         {isModal && <Modal setIsModal={setIsModal} />}
         <div className="flex justify-center mt-10">
