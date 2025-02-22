@@ -70,7 +70,7 @@ function SpeakerPage() {
               </div>
             </div>
           </div>
-          <line className="border-2 border-gray-400 mr-2 ml-1"></line>
+          <div className="border-2 border-gray-400 mr-2 ml-1"></div>
           <div>
             <Memo />
           </div>
