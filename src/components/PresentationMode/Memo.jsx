@@ -80,7 +80,7 @@ function Memo() {
               value={memo}
               onChange={handleWriteMemo}
               className={
-                "textarea textarea-bordered resize-none w-[300px] h-[850px] bg-third text-white"
+                "textarea textarea-bordered resize-none w-[300px] h-[850px] bg-third text-white opacity-40"
               }
               style={{ fontSize: `${fontSize}px` }}
             ></textarea>

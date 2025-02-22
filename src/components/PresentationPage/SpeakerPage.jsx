@@ -59,7 +59,7 @@ function SpeakerPage() {
                 />
               </div>
             </div>
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center mt-2">
               <div className="border-4 rounded-xl bg-third border-primary">
                 <div className="mt-10 mr-10 ml-20 mb-10">
                   <DocumentViewer
