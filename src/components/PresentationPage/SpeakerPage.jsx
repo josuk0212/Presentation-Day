@@ -44,7 +44,7 @@ function SpeakerPage() {
               <div>
                 <Timer />
               </div>
-              <div className="flex ml-[48%] gap-4">
+              <div className="flex ml-[60%] gap-4">
                 <WhiteButton
                   onClickEvent={handleDrawingToggle}
                   title={drawButtonTitle[0]}
