@@ -22,15 +22,31 @@ function Home() {
 
   return (
     <>
-      <h1 className="flex justify-center text-5xl mt-16">Welcome HP</h1>
-      <div className="flex justify-center text-2xl mt-6">Help Presentation</div>
-      {isModal && <Modal setIsModal={setIsModal} />}
-      <FileUpload />
-      {pdfUrl && <DocumentViewer pdfUrl={pdfUrl} />}
-      <Button
-        onClickEvent={handlePresentationMode}
-        title={buttonTitle}
-      />
+      <div>
+        <h1 className="flex justify-center text-5xl mt-16">Welcome HP</h1>
+        <div className="flex justify-center text-2xl mt-6">
+          Help Presentation
+        </div>
+        {isModal && <Modal setIsModal={setIsModal} />}
+        <div className="flex justify-center mt-10">
+          <div className="flex justify-center items-center">
+            <div>{pdfUrl && <DocumentViewer pdfUrl={pdfUrl} />}</div>
+            <div className="flex flex-col justify-center items-center w-full h-full">
+              <div className="flex flex-col gap-36">
+                <div>
+                  <FileUpload />
+                </div>
+                <div className="flex justify-center">
+                  <Button
+                    onClickEvent={handlePresentationMode}
+                    title={buttonTitle}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
