@@ -8,6 +8,7 @@ export default {
       colors: {
         primary: "#3f3f46",
         second: "#f9fafb",
+        third: "#71717a",
         background: "#f1f5f9",
         modalbg: "#e2e8f0",
       },

@@ -55,7 +55,9 @@ function Timer() {
     <>
       <div className="flex items-center ml-7">
         <div className="w-[110px]">
-          <span className="font-extrabold text-2xl">{displayTime}</span>
+          <span className="font-extrabold text-2xl text-white">
+            {displayTime}
+          </span>
         </div>
         <div className="flex ml-5 gap-4">
           <div>
