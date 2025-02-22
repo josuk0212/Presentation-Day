@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-import Button from "../Share/Button";
+import { WhiteButton } from "../Share/Button";
 
 function Memo() {
   const [fontSize, setFontSize] = useState(20);
@@ -89,13 +89,13 @@ function Memo() {
         <div className="flex gap-[34%]">
           <div className="flex gap-[10%]">
             <div>
-              <Button
+              <WhiteButton
                 title={buttonTitle[0]}
                 onClickEvent={handleIncreaseFontSize}
               />
             </div>
             <div>
-              <Button
+              <WhiteButton
                 title={buttonTitle[1]}
                 onClickEvent={handleDecreaseFontSize}
               />

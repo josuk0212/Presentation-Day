@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-function Button({ onClickEvent, title }) {
+function WhiteButton({ onClickEvent, title }) {
   return (
     <button
       onClick={onClickEvent}
@@ -11,9 +11,25 @@ function Button({ onClickEvent, title }) {
   );
 }
 
-export default Button;
+function BlackButton({ onClickEvent, title }) {
+  return (
+    <button
+      onClick={onClickEvent}
+      className="btn btn-outline border-stone-900"
+    >
+      {title}
+    </button>
+  );
+}
 
-Button.propTypes = {
+export { WhiteButton, BlackButton };
+
+WhiteButton.propTypes = {
+  onClickEvent: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+};
+
+BlackButton.propTypes = {
   onClickEvent: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
 };

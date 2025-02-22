@@ -1,7 +1,7 @@
 import useOnOffStore from "../../stores/useOnOffStore";
 import Memo from "../PresentationMode/Memo";
 import Timer from "../PresentationMode/Timer";
-import Button from "../Share/Button";
+import { WhiteButton } from "../Share/Button";
 import DocumentViewer from "../ViewDocument/DocumentViewer";
 
 function SpeakerPage() {
@@ -45,15 +45,15 @@ function SpeakerPage() {
                 <Timer />
               </div>
               <div className="flex ml-[48%] gap-4">
-                <Button
+                <WhiteButton
                   onClickEvent={handleDrawingToggle}
                   title={drawButtonTitle[0]}
                 />
-                <Button
+                <WhiteButton
                   onClickEvent={handleClearDrawing}
                   title={drawButtonTitle[1]}
                 />
-                <Button
+                <WhiteButton
                   onClickEvent={handleCloseSpeakerPage}
                   title={closeButtonTitle}
                 />
