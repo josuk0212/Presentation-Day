@@ -6,7 +6,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "#7e22ce",
+        primary: "#5b21b6",
         modalbg: "#e2e8f0",
       },
     },
