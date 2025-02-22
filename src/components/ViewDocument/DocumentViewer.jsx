@@ -1,8 +1,6 @@
 import PropTypes from "prop-types";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
-import "react-pdf/dist/Page/AnnotationLayer.css";
-import "react-pdf/dist/Page/TextLayer.css";
 
 import useOnOffStore from "../../stores/useOnOffStore";
 import Drawing from "../PresentationMode/Canvas";
@@ -97,6 +95,8 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
             <Page
               canvasRef={pdfRef}
               pageNumber={pageNumber}
+              renderTextLayer={false}
+              renderAnnotationLayer={false}
               scale={isFullScreen ? 1 : 0.5}
             />
           </Document>

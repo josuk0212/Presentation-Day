@@ -10,13 +10,8 @@ function Drawing({ pdfRef }) {
   const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
   const [coordinateList, setCoordinateList] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
-  const {
-    isDisplayDrawing,
-    isClearDrawing,
-    isOpenSpeakerPage,
-    isFullScreen,
-    setIsClearDrawing,
-  } = useOnOffStore();
+  const { isDisplayDrawing, isClearDrawing, isOpenSpeakerPage, isFullScreen } =
+    useOnOffStore();
   const canvasRef = useRef(null);
 
   const canvasChannel = useMemo(() => {
@@ -54,8 +49,32 @@ function Drawing({ pdfRef }) {
     context.strokestyle = "black";
     context.lineWidth = 2.5;
 
+    function drawCoordinate(context) {
+      if (!isFullScreen) {
+        coordinateList.forEach((coord) => {
+          context.beginPath();
+          context.moveTo(coord.startCoordinateX, coord.startCoordinateY);
+          context.lineTo(coord.finishCoordinateX, coord.finishCoordinateY);
+          context.stroke();
+        });
+      } else {
+        coordinateList.forEach((coord) => {
+          context.beginPath();
+          context.moveTo(
+            coord.startCoordinateX * 2,
+            coord.startCoordinateY * 2
+          );
+          context.lineTo(
+            coord.finishCoordinateX * 2,
+            coord.finishCoordinateY * 2
+          );
+          context.stroke();
+        });
+      }
+    }
+
     coordinateList && drawCoordinate(context);
-  }, [coordinateList, pdfRef]);
+  }, [coordinateList, pdfRef, isFullScreen]);
 
   function handleStartDrawing(event) {
     if (!isShowDrawing) {
@@ -88,33 +107,20 @@ function Drawing({ pdfRef }) {
     localStorage.setItem("coordinateList", JSON.stringify(coordinateList));
   }
 
-  addEventListener("storage", () => {
-    const savedCoordinateList = JSON.parse(
-      localStorage.getItem("coordinateList")
-    );
-    setCoordinateList(savedCoordinateList);
-  });
-
-  function drawCoordinate(context) {
-    if (!isFullScreen) {
-      coordinateList.forEach((coord) => {
-        context.beginPath();
-        context.moveTo(coord.startCoordinateX, coord.startCoordinateY);
-        context.lineTo(coord.finishCoordinateX, coord.finishCoordinateY);
-        context.stroke();
-      });
-    } else {
-      coordinateList.forEach((coord) => {
-        context.beginPath();
-        context.moveTo(coord.startCoordinateX * 2, coord.startCoordinateY * 2);
-        context.lineTo(
-          coord.finishCoordinateX * 2,
-          coord.finishCoordinateY * 2
-        );
-        context.stroke();
-      });
+  useEffect(() => {
+    function getDrawingData() {
+      const savedCoordinateList = JSON.parse(
+        localStorage.getItem("coordinateList")
+      );
+      setCoordinateList(savedCoordinateList);
     }
-  }
+
+    addEventListener("storage", getDrawingData);
+
+    return () => {
+      removeEventListener("storage", getDrawingData);
+    };
+  }, []);
 
   function handleFinishDrawing() {
     setIsDrawing(false);
@@ -137,7 +143,7 @@ function Drawing({ pdfRef }) {
       context.clearRect(0, 0, canvas.width, canvas.height);
       localStorage.removeItem("coordinateList");
       setCoordinateList([]);
-      setIsClearDrawing(false);
+      setIsResetDrawing(false);
     }
   }, [isResetDrawing]);
 

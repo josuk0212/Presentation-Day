@@ -1,17 +1,25 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function CursorPointer({ pdfRef }) {
   const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
 
   const audiencPageViewerCoodinate = pdfRef.current.getBoundingClientRect();
 
-  addEventListener("storage", () => {
-    const coordX = Number(localStorage.getItem("coordX"));
-    const coordY = Number(localStorage.getItem("coordY"));
+  useEffect(() => {
+    function getCursorCoordinate() {
+      const coordX = Number(localStorage.getItem("coordX"));
+      const coordY = Number(localStorage.getItem("coordY"));
 
-    setCoordinate({ x: coordX, y: coordY });
-  });
+      setCoordinate({ x: coordX, y: coordY });
+    }
+
+    addEventListener("storage", getCursorCoordinate);
+
+    return () => {
+      removeEventListener("storage", getCursorCoordinate);
+    };
+  }, []);
 
   return (
     <div
