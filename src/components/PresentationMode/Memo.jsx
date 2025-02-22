@@ -99,7 +99,7 @@ function Memo() {
               />
             </div>
           </div>
-          <button className="btn">Save Memo</button>
+          <button className="btn btn-outline text-white">Save Memo</button>
         </div>
       </form>
     </div>

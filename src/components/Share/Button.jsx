@@ -4,7 +4,7 @@ function Button({ onClickEvent, title }) {
   return (
     <button
       onClick={onClickEvent}
-      className="btn"
+      className="btn btn-outline text-white"
     >
       {title}
     </button>

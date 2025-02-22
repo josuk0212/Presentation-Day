@@ -4,15 +4,12 @@ import useFileStore from "../../stores/useFileStore";
 import useOnOffStore from "../../stores/useOnOffStore";
 import FileUpload from "../FileUpload/FileUpload";
 import Modal from "../PresentationMode/Modal";
-import Button from "../Share/Button";
 import DocumentViewer from "../ViewDocument/DocumentViewer";
 
 function Home() {
   const [isModal, setIsModal] = useState(false);
   const { pdfUrl } = useFileStore();
   const { setIsOpenSpeakerpage } = useOnOffStore();
-
-  const buttonTitle = "Go to Presentation!";
 
   function handlePresentationMode() {
     setIsModal(true);
@@ -44,10 +41,12 @@ function Home() {
                 </div>
                 <div className="flex justify-center">
                   {pdfUrl && (
-                    <Button
-                      onClickEvent={handlePresentationMode}
-                      title={buttonTitle}
-                    />
+                    <button
+                      onClick={handlePresentationMode}
+                      className="btn btn-outline border-stone-900"
+                    >
+                      Go to Presentation!
+                    </button>
                   )}
                 </div>
               </div>
