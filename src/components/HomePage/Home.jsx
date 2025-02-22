@@ -18,14 +18,14 @@ function Home() {
   }
 
   return (
-    <>
-      <div className="w-screen h-screen bg-background">
-        <div className="flex flex-col justify-center items-center h-44 bg-primary">
-          <h1 className="text-white text-5xl">Welcome HP</h1>
-          <div className="text-white text-2xl">Help Presentation</div>
-        </div>
-        {isModal && <Modal setIsModal={setIsModal} />}
-        <div className="flex justify-center mt-5">
+    <div className="w-screen h-screen bg-background">
+      <div className="flex flex-col justify-center items-center h-44 bg-primary">
+        <h1 className="text-white text-5xl">Welcome HP</h1>
+        <div className="text-white text-2xl">Help Presentation</div>
+      </div>
+      {isModal && <Modal setIsModal={setIsModal} />}
+      <div className="flex justify-center items-center w-full h-full bg-background">
+        <div>
           <div className="flex items-center gap-20">
             {pdfUrl && (
               <div className="border-4 rounded-xl bg-white border-primary">
@@ -54,7 +54,7 @@ function Home() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

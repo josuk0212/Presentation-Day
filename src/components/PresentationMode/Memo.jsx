@@ -72,18 +72,20 @@ function Memo() {
         method="post"
         onSubmit={handleSaveMemo}
       >
-        <label className="w-min h-min">
-          <textarea
-            name={pageNumber}
-            placeholder="글자를 입력해주세요"
-            value={memo}
-            onChange={handleWriteMemo}
-            className={
-              "textarea textarea-bordered resize-none w-[300px] h-[690px] bg-third text-white"
-            }
-            style={{ fontSize: `${fontSize}px` }}
-          ></textarea>
-        </label>
+        <div>
+          <label>
+            <textarea
+              name={pageNumber}
+              placeholder="글자를 입력해주세요"
+              value={memo}
+              onChange={handleWriteMemo}
+              className={
+                "textarea textarea-bordered resize-none w-[300px] h-[850px] bg-third text-white"
+              }
+              style={{ fontSize: `${fontSize}px` }}
+            ></textarea>
+          </label>
+        </div>
         <div className="flex gap-[34%]">
           <div className="flex gap-[10%]">
             <div>
