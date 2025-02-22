@@ -33,7 +33,7 @@ function Home() {
         <div className="flex justify-center mt-10">
           <div className="flex justify-center items-center gap-20">
             {pdfUrl && (
-              <div className="border-4 rounded-xl bg-[#f9fafb] border-primary">
+              <div className="border-4 rounded-xl bg-white border-primary">
                 <div className="mt-10 mr-10 ml-20 mb-10">
                   <DocumentViewer pdfUrl={pdfUrl} />
                 </div>
