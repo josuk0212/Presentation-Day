@@ -36,8 +36,8 @@ function SpeakerPage() {
   }
 
   return (
-    <>
-      <div className="flex">
+    <div className="w-screen h-screen bg-primary">
+      <div className="flex justify-center">
         <div>
           <Timer />
         </div>
@@ -56,16 +56,18 @@ function SpeakerPage() {
           />
         </div>
       </div>
-      <div className="flex">
-        <div className="w-[80%] ml h-min border-4">
-          <DocumentViewer
-            pdfUrl={pdfUrl}
-            getCursorCoordinate={getCursorCoordinate}
-          />
+      <div className="flex justify-center">
+        <div className="border-4 rounded-xl bg-second border-primary">
+          <div className="mt-10 mr-10 ml-20 mb-10">
+            <DocumentViewer
+              pdfUrl={pdfUrl}
+              getCursorCoordinate={getCursorCoordinate}
+            />
+          </div>
         </div>
         <Memo />
       </div>
-    </>
+    </div>
   );
 }
 
