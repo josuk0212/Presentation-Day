@@ -22,7 +22,7 @@ function Home() {
 
   return (
     <div className="w-screen h-screen bg-background">
-      <div className="flex flex-col justify-center items-center h-44 bg-primary">
+      <div className="flex flex-col justify-center items-center h-36 bg-primary">
         <h1 className="text-white text-5xl">Welcome HP</h1>
         <div className="text-white text-2xl">Help Presentation</div>
       </div>
