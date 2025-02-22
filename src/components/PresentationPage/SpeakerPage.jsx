@@ -37,35 +37,41 @@ function SpeakerPage() {
 
   return (
     <div className="w-screen h-screen bg-primary">
-      <div className="flex justify-center">
+      <div className="flex justify-center items-center w-full h-full">
         <div>
-          <Timer />
-        </div>
-        <div className="flex ml-[630px] gap-4">
-          <Button
-            onClickEvent={handleDrawingToggle}
-            title={drawButtonTitle[0]}
-          />
-          <Button
-            onClickEvent={handleClearDrawing}
-            title={drawButtonTitle[1]}
-          />
-          <Button
-            onClickEvent={handleCloseSpeakerPage}
-            title={closeButtonTitle}
-          />
-        </div>
-      </div>
-      <div className="flex justify-center">
-        <div className="border-4 rounded-xl bg-second border-primary">
-          <div className="mt-10 mr-10 ml-20 mb-10">
-            <DocumentViewer
-              pdfUrl={pdfUrl}
-              getCursorCoordinate={getCursorCoordinate}
-            />
+          <div className="flex">
+            <div>
+              <Timer />
+            </div>
+            <div className="flex ml-[48%] gap-4">
+              <Button
+                onClickEvent={handleDrawingToggle}
+                title={drawButtonTitle[0]}
+              />
+              <Button
+                onClickEvent={handleClearDrawing}
+                title={drawButtonTitle[1]}
+              />
+              <Button
+                onClickEvent={handleCloseSpeakerPage}
+                title={closeButtonTitle}
+              />
+            </div>
+          </div>
+          <div className="flex justify-center items-center">
+            <div className="border-4 rounded-xl bg-second border-primary">
+              <div className="mt-10 mr-10 ml-20 mb-10">
+                <DocumentViewer
+                  pdfUrl={pdfUrl}
+                  getCursorCoordinate={getCursorCoordinate}
+                />
+              </div>
+            </div>
+            <div>
+              <Memo />
+            </div>
           </div>
         </div>
-        <Memo />
       </div>
     </div>
   );

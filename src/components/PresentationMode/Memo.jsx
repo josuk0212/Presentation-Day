@@ -67,38 +67,42 @@ function Memo() {
   }, [pageNumber, memoList]);
 
   return (
-    <>
-      <div>
-        <form
-          method="post"
-          onSubmit={handleSaveMemo}
-        >
-          <label className="w-min h-min">
-            <textarea
-              name={pageNumber}
-              placeholder="글자를 입력해주세요"
-              value={memo}
-              onChange={handleWriteMemo}
-              className={
-                "textarea textarea-bordered resize-none w-[250px] h-[500px]"
-              }
-              style={{ fontSize: `${fontSize}px` }}
-            ></textarea>
-          </label>
-          <div className="flex-col">
-            <Button
-              title={buttonTitle[0]}
-              onClickEvent={handleIncreaseFontSize}
-            />
-            <Button
-              title={buttonTitle[1]}
-              onClickEvent={handleDecreaseFontSize}
-            />
-            <button className="btn">Save Memo</button>
+    <div>
+      <form
+        method="post"
+        onSubmit={handleSaveMemo}
+      >
+        <label className="w-min h-min">
+          <textarea
+            name={pageNumber}
+            placeholder="글자를 입력해주세요"
+            value={memo}
+            onChange={handleWriteMemo}
+            className={
+              "textarea textarea-bordered resize-none w-[300px] h-[690px]"
+            }
+            style={{ fontSize: `${fontSize}px` }}
+          ></textarea>
+        </label>
+        <div className="flex gap-[34%]">
+          <div className="flex gap-[10%]">
+            <div>
+              <Button
+                title={buttonTitle[0]}
+                onClickEvent={handleIncreaseFontSize}
+              />
+            </div>
+            <div>
+              <Button
+                title={buttonTitle[1]}
+                onClickEvent={handleDecreaseFontSize}
+              />
+            </div>
           </div>
-        </form>
-      </div>
-    </>
+          <button className="btn">Save Memo</button>
+        </div>
+      </form>
+    </div>
   );
 }
 
