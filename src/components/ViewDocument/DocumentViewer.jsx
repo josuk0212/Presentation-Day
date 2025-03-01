@@ -105,7 +105,7 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
       </div>
       {totalPageNumber !== 1 && (
         <div className="flex justify-center mt-5">
-          <div className="flex items-center mr-3">
+          <div className="flex items-center mr-10">
             <button
               className="btn btn-ghost text-2xl"
               onClick={handlePreviousPage}
@@ -113,7 +113,7 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
               ←
             </button>
           </div>
-          <div className="flex w-[1020px] overflow-hidden">
+          <div className="flex w-[1050px] overflow-hidden">
             <div style={{ transform: `translateX(${moveIndex}px)` }}>
               <SlideViewer
                 pdfUrl={pdfUrl}
