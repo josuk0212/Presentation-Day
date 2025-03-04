@@ -32,8 +32,8 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
     };
   }, [documentViewerChannel]);
 
-  function onLoadSuccess({ totalPageNumber }) {
-    setTotalPageNumber(totalPageNumber);
+  function onLoadSuccess({ numPages }) {
+    setTotalPageNumber(numPages);
   }
 
   function handlePreviousPage() {
@@ -117,10 +117,8 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
             <div style={{ transform: `translateX(${moveIndex}px)` }}>
               <SlideViewer
                 pdfUrl={pdfUrl}
-                totalPageNumber={totalPageNumber}
                 pageNumber={pageNumber}
                 setPageNumber={setPageNumber}
-                setTotalPageNumber={setTotalPageNumber}
               />
             </div>
           </div>
