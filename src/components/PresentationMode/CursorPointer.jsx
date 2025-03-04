@@ -3,14 +3,19 @@ import { useEffect, useState } from "react";
 
 function CursorPointer({ pdfRef }) {
   const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
-
-  const audiencePageViewerCoodinate = pdfRef.current.getBoundingClientRect();
+  const [audiencePageViewerCoodinate, setAudiencePageViewerCoodinate] =
+    useState({ x: 0, y: 0 });
 
   useEffect(() => {
     function getCursorCoordinate() {
       const coordX = Number(localStorage.getItem("coordX"));
       const coordY = Number(localStorage.getItem("coordY"));
+      const fullScreenViewerCoodinate = pdfRef.current.getBoundingClientRect();
 
+      setAudiencePageViewerCoodinate({
+        x: fullScreenViewerCoodinate.x,
+        y: fullScreenViewerCoodinate.y,
+      });
       setCoordinate({ x: coordX, y: coordY });
     }
 

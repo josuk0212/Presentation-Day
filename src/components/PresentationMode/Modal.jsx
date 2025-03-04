@@ -4,14 +4,13 @@ import useOnOffStore from "../../stores/useOnOffStore";
 import { BlackButton } from "../Share/Button";
 
 function Modal({ setIsModal }) {
-  const { setIsFullScreen, setIsOpenSpeakerpage } = useOnOffStore();
+  const { setIsFullScreen } = useOnOffStore();
   const closeButtonTitle = "X";
   const viewButtonTitle = "Full Screen";
 
   function closeModal() {
     setIsModal(false);
     setIsFullScreen(false);
-    setIsOpenSpeakerpage(false);
   }
 
   function viewFullScreen() {

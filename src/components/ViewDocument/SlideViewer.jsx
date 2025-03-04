@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -6,13 +7,9 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url
 ).toString();
 
-function SlideViewer({
-  pdfUrl,
-  totalPageNumber,
-  pageNumber,
-  setPageNumber,
-  setTotalPageNumber,
-}) {
+function SlideViewer({ pdfUrl, pageNumber, setPageNumber }) {
+  const [totalPageNumber, setTotalPageNumber] = useState(null);
+
   function onLoadSuccess({ numPages }) {
     setTotalPageNumber(numPages);
   }
@@ -61,8 +58,6 @@ export default SlideViewer;
 
 SlideViewer.propTypes = {
   pdfUrl: PropTypes.string.isRequired,
-  totalPageNumber: PropTypes.number.isRequired,
   pageNumber: PropTypes.number.isRequired,
   setPageNumber: PropTypes.func.isRequired,
-  setTotalPageNumber: PropTypes.func.isRequired,
 };

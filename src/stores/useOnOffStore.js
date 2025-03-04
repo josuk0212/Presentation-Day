@@ -2,13 +2,13 @@ import { create } from "zustand";
 
 const useOnOffStore = create((set) => ({
   isFullScreen: false,
-  isOpenSpeakerPage: false,
   isDisplayDrawing: false,
   isClearDrawing: false,
+  isCloseSpeakerPage: false,
   setIsFullScreen: (state) => set({ isFullScreen: state }),
-  setIsOpenSpeakerpage: (state) => set({ isOpenSpeakerPage: state }),
   setIsDisplayDrawing: (state) => set({ isDisplayDrawing: state }),
   setIsClearDrawing: (state) => set({ isClearDrawing: state }),
+  setIsCloseSpeakerPage: (state) => set({ isCloseSpeakerPage: state }),
 }));
 
 export default useOnOffStore;

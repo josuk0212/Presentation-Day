@@ -16,7 +16,8 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
   const [totalPageNumber, setTotalPageNumber] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [moveIndex, setMoveIndex] = useState(0);
-  const { isOpenSpeakerPage, isFullScreen } = useOnOffStore();
+  const [pdfSize, setPdfSize] = useState({ width: 0, height: 0 });
+  const { isFullScreen } = useOnOffStore();
   const pdfRef = useRef(null);
 
   const documentViewerChannel = useMemo(() => {
@@ -32,8 +33,12 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
     };
   }, [documentViewerChannel]);
 
-  function onLoadSuccess({ totalPageNumber }) {
-    setTotalPageNumber(totalPageNumber);
+  function onLoadSuccess({ numPages }) {
+    setTotalPageNumber(numPages);
+  }
+
+  function getPdfSize(page) {
+    setPdfSize({ width: page.width, height: page.height });
   }
 
   function handlePreviousPage() {
@@ -73,7 +78,7 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
   }, [pageNumber]);
 
   function handleChangeLoadingText() {
-    const loadingText = "Loding...";
+    const loadingText = "Loading...";
     return loadingText;
   }
 
@@ -83,24 +88,41 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
         <div
           id="view-document"
           onMouseMove={getCursorCoordinate}
-          className="flex justify-center w-min h-min"
+          className="flex justify-center border-2 w-min h-min border-primary"
         >
-          <Document
-            file={pdfUrl}
-            onLoadSuccess={onLoadSuccess}
-            loading={handleChangeLoadingText}
-            className="m-auto border-2 border-primary"
+          <div
+            className="m-auto"
+            style={{
+              width: `${pdfSize.width}px`,
+              height: `${pdfSize.height}px`,
+            }}
           >
-            <Drawing pdfRef={pdfRef} />
-            <Page
-              canvasRef={pdfRef}
-              pageNumber={pageNumber}
-              renderTextLayer={false}
-              renderAnnotationLayer={false}
-              scale={isFullScreen ? 1 : 0.5}
-            />
-          </Document>
-          {isOpenSpeakerPage && <CursorPointer pdfRef={pdfRef} />}
+            <Document
+              file={pdfUrl}
+              onLoadSuccess={onLoadSuccess}
+              loading={handleChangeLoadingText}
+            >
+              <Drawing pdfRef={pdfRef} />
+              <Page
+                canvasRef={pdfRef}
+                onLoadSuccess={getPdfSize}
+                pageNumber={pageNumber}
+                renderTextLayer={false}
+                renderAnnotationLayer={false}
+                loading={
+                  <div
+                    className="bg-white"
+                    style={{
+                      width: `${pdfSize.width}px`,
+                      height: `${pdfSize.height}px`,
+                    }}
+                  ></div>
+                }
+                scale={isFullScreen ? 1 : 0.5}
+              />
+            </Document>
+            {isFullScreen && <CursorPointer pdfRef={pdfRef} />}
+          </div>
         </div>
       </div>
       {totalPageNumber !== 1 && (
@@ -117,10 +139,8 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
             <div style={{ transform: `translateX(${moveIndex}px)` }}>
               <SlideViewer
                 pdfUrl={pdfUrl}
-                totalPageNumber={totalPageNumber}
                 pageNumber={pageNumber}
                 setPageNumber={setPageNumber}
-                setTotalPageNumber={setTotalPageNumber}
               />
             </div>
           </div>

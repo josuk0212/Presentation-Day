@@ -5,9 +5,18 @@ import { WhiteButton } from "../Share/Button";
 import DocumentViewer from "../ViewDocument/DocumentViewer";
 
 function SpeakerPage() {
-  const { isDisplayDrawing, setIsDisplayDrawing, setIsClearDrawing } =
-    useOnOffStore();
+  const {
+    isDisplayDrawing,
+    isCloseSpeakerPage,
+    setIsDisplayDrawing,
+    setIsClearDrawing,
+    setIsCloseSpeakerPage,
+  } = useOnOffStore();
   const pdfUrl = localStorage.getItem("pdfUrl");
+
+  const finishPresentationChannel = new BroadcastChannel("finish");
+  finishPresentationChannel.postMessage(isCloseSpeakerPage);
+
   const drawButtonTitle = ["🖍️", "🧽"];
   const closeButtonTitle = "X";
 
@@ -32,6 +41,7 @@ function SpeakerPage() {
   }
 
   function handleCloseSpeakerPage() {
+    setIsCloseSpeakerPage(true);
     window.close();
   }
 
@@ -60,7 +70,7 @@ function SpeakerPage() {
               </div>
             </div>
             <div className="flex justify-center items-center mt-2">
-              <div className="border-4 rounded-xl bg-third border-primary">
+              <div className="border-4 rounded-xl bg-second border-primary">
                 <div className="mt-10 mr-10 ml-20 mb-10">
                   <DocumentViewer
                     pdfUrl={pdfUrl}
