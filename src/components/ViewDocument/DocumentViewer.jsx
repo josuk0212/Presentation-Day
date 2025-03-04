@@ -73,7 +73,7 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
   }, [pageNumber]);
 
   function handleChangeLoadingText() {
-    const loadingText = "Loding...";
+    const loadingText = "Loading...";
     return loadingText;
   }
 
