@@ -6,12 +6,16 @@ import useOnOffStore from "../../stores/useOnOffStore";
 function Drawing({ pdfRef }) {
   const [isDrawing, setIsDrawing] = useState(false);
   const [isShowDrawing, setIsShowDrawing] = useState(false);
-  const [isResetDrawing, setIsResetDrawing] = useState(false);
   const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
   const [coordinateList, setCoordinateList] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
-  const { isDisplayDrawing, isClearDrawing, isOpenSpeakerPage, isFullScreen } =
-    useOnOffStore();
+  const {
+    isDisplayDrawing,
+    isClearDrawing,
+    isOpenSpeakerPage,
+    isFullScreen,
+    setIsClearDrawing,
+  } = useOnOffStore();
   const canvasRef = useRef(null);
 
   const canvasChannel = useMemo(() => {
@@ -21,9 +25,9 @@ function Drawing({ pdfRef }) {
 
   const toggleChannel = useMemo(() => {
     const channel = new BroadcastChannel("toggle");
-    channel.postMessage([isDisplayDrawing, isClearDrawing]);
+    channel.postMessage(isDisplayDrawing);
     return channel;
-  }, [isDisplayDrawing, isClearDrawing]);
+  }, [isDisplayDrawing]);
 
   useEffect(() => {
     canvasChannel.onmessage = (shareState) => {
@@ -31,8 +35,7 @@ function Drawing({ pdfRef }) {
     };
 
     toggleChannel.onmessage = (shareState) => {
-      setIsShowDrawing(shareState.data[0]);
-      setIsResetDrawing(shareState.data[1]);
+      setIsShowDrawing(shareState.data);
     };
   }, [canvasChannel, toggleChannel]);
 
@@ -93,6 +96,10 @@ function Drawing({ pdfRef }) {
       return;
     }
 
+    if (!coordinateList) {
+      setCoordinateList([]);
+    }
+
     const finishCoordinateX = event.nativeEvent.offsetX;
     const finishCoordinateY = event.nativeEvent.offsetY;
     const saveCoordinate = {
@@ -133,19 +140,8 @@ function Drawing({ pdfRef }) {
     context.clearRect(0, 0, canvas.width, canvas.height);
     localStorage.removeItem("coordinateList");
     setCoordinateList([]);
-  }, [pageNumber, isOpenSpeakerPage]);
-
-  useEffect(() => {
-    if (isResetDrawing) {
-      const canvas = canvasRef.current;
-      const context = canvas.getContext("2d");
-
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      localStorage.removeItem("coordinateList");
-      setCoordinateList([]);
-      setIsResetDrawing(false);
-    }
-  }, [isResetDrawing]);
+    setIsClearDrawing(false);
+  }, [pageNumber, isOpenSpeakerPage, isClearDrawing]);
 
   return (
     <canvas
