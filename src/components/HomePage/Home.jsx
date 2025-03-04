@@ -22,7 +22,7 @@ function Home() {
 
   return (
     <div className="w-screen h-screen bg-background">
-      <div className="flex flex-col justify-center items-center h-36 bg-primary">
+      <div className="flex justify-center items-center h-36 bg-primary">
         <h1 className="text-white text-5xl">Presentation Day</h1>
       </div>
       {isModal && <Modal setIsModal={setIsModal} />}
