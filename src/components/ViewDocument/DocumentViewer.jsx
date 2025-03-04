@@ -17,7 +17,7 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
   const [pageNumber, setPageNumber] = useState(1);
   const [moveIndex, setMoveIndex] = useState(0);
   const [pdfSize, setPdfSize] = useState({ width: 0, height: 0 });
-  const { isOpenSpeakerPage, isFullScreen } = useOnOffStore();
+  const { isFullScreen } = useOnOffStore();
   const pdfRef = useRef(null);
 
   const documentViewerChannel = useMemo(() => {
@@ -121,7 +121,7 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
                 scale={isFullScreen ? 1 : 0.5}
               />
             </Document>
-            {isOpenSpeakerPage && <CursorPointer pdfRef={pdfRef} />}
+            {isFullScreen && <CursorPointer pdfRef={pdfRef} />}
           </div>
         </div>
       </div>

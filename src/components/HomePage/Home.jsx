@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import useFileStore from "../../stores/useFileStore";
 import useOnOffStore from "../../stores/useOnOffStore";
@@ -10,15 +10,29 @@ import DocumentViewer from "../ViewDocument/DocumentViewer";
 function Home() {
   const [isModal, setIsModal] = useState(false);
   const { pdfUrl } = useFileStore();
-  const { setIsOpenSpeakerpage } = useOnOffStore();
+  const { setIsFullScreen } = useOnOffStore();
 
   const buttonTitle = "Go to Presentation!";
 
   function handlePresentationMode() {
     setIsModal(true);
-    setIsOpenSpeakerpage(true);
     window.open("http://localhost:5173/Speaker");
   }
+
+  const finishPresentationChannel = useMemo(() => {
+    const channel = new BroadcastChannel("finish");
+    return channel;
+  }, []);
+
+  useEffect(() => {
+    finishPresentationChannel.onmessage = (shareState) => {
+      if (shareState.data) {
+        setIsModal(false);
+        setIsFullScreen(false);
+        document.exitFullscreen();
+      }
+    };
+  }, [finishPresentationChannel]);
 
   return (
     <div className="w-screen h-screen bg-background">

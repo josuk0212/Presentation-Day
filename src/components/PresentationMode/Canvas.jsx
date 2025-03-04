@@ -9,13 +9,8 @@ function Drawing({ pdfRef }) {
   const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
   const [coordinateList, setCoordinateList] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
-  const {
-    isDisplayDrawing,
-    isClearDrawing,
-    isOpenSpeakerPage,
-    isFullScreen,
-    setIsClearDrawing,
-  } = useOnOffStore();
+  const { isDisplayDrawing, isClearDrawing, isFullScreen, setIsClearDrawing } =
+    useOnOffStore();
   const canvasRef = useRef(null);
 
   const canvasChannel = useMemo(() => {
@@ -134,6 +129,10 @@ function Drawing({ pdfRef }) {
   }
 
   useEffect(() => {
+    if (isFullScreen) {
+      return;
+    }
+
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
 
@@ -141,7 +140,7 @@ function Drawing({ pdfRef }) {
     localStorage.removeItem("coordinateList");
     setCoordinateList([]);
     setIsClearDrawing(false);
-  }, [pageNumber, isOpenSpeakerPage, isClearDrawing]);
+  }, [pageNumber, isClearDrawing, isFullScreen]);
 
   return (
     <canvas
