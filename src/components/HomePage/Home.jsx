@@ -16,7 +16,7 @@ function Home() {
 
   function handlePresentationMode() {
     setIsModal(true);
-    window.open("http://localhost:5173/Speaker");
+    window.open("https://presentation-day.today/Speaker");
   }
 
   const finishPresentationChannel = useMemo(() => {
