@@ -1,12 +1,16 @@
 ## 목차
 
-[Presentation Day](#presentation-day) <br/>
-[개발동기](#개발동기) <br/>
-[기능소개](#기능소개) <br/>
-[기술스택](#기술스택) <br/>
-[첼린지](#첼린지) <br/>
-[트러블슈팅](#트러블슈팅) <br/>
-[기획자](#기획자)
+1. [Presentation Day](#presentation-day)
+2. [개발동기](#개발동기)
+3. [기능소개](#기능소개)
+4. [기술스택](#기술스택)
+5. [첼린지](#첼린지)
+   - PDF파일 렌더링
+   - 발표자 페이지와 청중 페이지 싱크 맞추기
+6. [트러블슈팅](#트러블슈팅)
+   - 최적화 문제
+   - 드로잉 버튼 클릭 시 canvas 크기가 임의로 변경되는 문제
+7. [기획자](#기획자)
 
 ## Presentation Day
 
@@ -32,8 +36,6 @@
 <img src="https://img.shields.io/badge/Tailwind-06B6D4?style=for-the-badge&logo=Tailwind CSS&logoColor=white">
 <img src="https://img.shields.io/badge/DaisyUI-1AD1A5?style=for-the-badge&logo=DaisyUI&logoColor=white">
 <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=Vite&logoColor=white">
-
-### Zustand를 선택한 이유
 
 ## 첼린지
 
