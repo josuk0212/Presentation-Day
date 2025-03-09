@@ -81,20 +81,175 @@ canvas 태그를 이용해서 웹사이트에 PDF 렌더링만 도와주며, 이
 
 - **2-2. 마우스 이동 실시간 동기화**
 
-발표자 페이지에서 마우스를 이동하면 청중 페이지에선 레이저 포인터처럼 커서 포인터가 이동하도록 구현하고자 했습니다.
+발표자 페이지에서 마우스를 이동시키면, 청중 페이지에서는 마치 레이저 포인터처럼 커서 포인터가 실시간으로 따라가도록 구현하고자 하였습니다. 이 기능은 발표자가 발표 중에 마우스를 이동할 때, 청중들이 발표자의 마우스 위치를 직관적으로 확인할 수 있게 만들어주는 중요한 기능 중 하나였습니다.
 
 **실시간 동기화는 어떻게 할까?**
 
-마우스 좌표값을 공유해야 한다고 생각하여 먼저 broadcast message API로 시도를 했지만, 마우스 이동의 특성 상 짧은 시간 안에 많은 좌표값이 전달되다 보니 흡사 무한 렌더링과 같은 데이터 이동을 감당하지 못했습니다.
+마우스 좌표값을 공유해야 한다고 생각하여 먼저 broadcast message API로 시도를 했지만, 마우스 이동의 특성 상 짧은 시간 안에 많은 좌표값이 전달되다 보니 이 많은 데이터를 즉시 실시간으로 처리하고 전송하는 데 있어 많은 어려움이 있었습니다. 앞선 방법으로는 흡사 무한 렌더링처럼 좌표값을 과도하게 처리하다보니 웹의 성능저하를 피할 수 없었습니다.
+
+**- localStorage**
+
+상기 문제를 해결하기 위해, 좌표값을 덮어쓰는 방식인 localStorage를 채용하게 되었습니다. 각 좌표값이 변경될 때마다 새로 받은 좌표값으로 이전 값을 덮어쓰는 방식으로 데이터를 처리하고, 실시간 데이터 변경을 감지할 수 있는 "Storage"이벤트를 사용하여 실시간 동기화를 구현했습니다.
+
+이렇게 하면, 과거의 좌표값이 계속 쌓이는 것이 아니라, 항상 최신의 좌표값만이 저장되어 있기 때문에 용량이 5MB밖에 되지 않는 localStorage의 데이터 용량에 큰 문제가 없을 것으로 판단했습니다. 또한, 클라이언트 간의 상태 변화가 적절하게 반영될 수 있도록 해주며, 네트워크나 렌더링 성능을 크게 저하시키지 않도록 도와주었습니다.
 
 **해상도 차이에 따른 싱크는 어떻게 맞춰야 할까?**
 
+양 페이지 간 마우스 실시간 동기화는 이루어졌지만, 발표자 페이지의 마우스 좌표값이 기준이 되기 때문에, 청중 페이지에서는 전체화면을 이용하기 때문에 해상도, 레이아웃 등의 차이로 청중 페이지 내에서는 원하는 지점에 마우스 커서 포인터가 위치해 있지 않았습니다.
+
+`screenXY`: 모니터 기준 좌표값
+
+`clientXY`: 브라우저 기준 좌표값
+
+`pageXY`: 스크롤을 포함한 페이지 기준 좌표값
+
+`offsetXY`: 특정 요소 기준 좌표값
+
+`getBoundingClientRect()`: 브라우저 내 특정 요소가 위치한 왼쪽 상단 위 좌표값
+
+본인은 각기 다른 좌표값을 알려주는 방법들을 조합하여 조건에 맞는 식을 찾으려고 했습니다.
+
+그 결과, `offsetXY` \* 양 페이지 간 배율 차이 + `getBoundingClientRect()`의 식을 세워 해결하였습니다.
+
+```jsx
+function CursorPointer({ pdfRef }) {
+  const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
+  const [audiencePageViewerCoodinate, setAudiencePageViewerCoodinate] =
+    useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    function getCursorCoordinate() {
+      const coordX = Number(localStorage.getItem("coordX"));
+      const coordY = Number(localStorage.getItem("coordY"));
+      const fullScreenViewerCoodinate = pdfRef.current.getBoundingClientRect();
+
+      setAudiencePageViewerCoodinate({
+        x: fullScreenViewerCoodinate.x,
+        y: fullScreenViewerCoodinate.y,
+      });
+      setCoordinate({ x: coordX, y: coordY });
+    }
+
+    addEventListener("storage", getCursorCoordinate);
+
+    return () => {
+      removeEventListener("storage", getCursorCoordinate);
+    };
+  }, []);
+
+  return (
+    <div
+      className="absolute w-5 h-5 bg-red-700 opacity-50 rounded-full"
+      style={{
+        left: `${coordinate.x * 2 + audiencePageViewerCoodinate.x - 10}px`,
+        top: `${coordinate.y * 2 + audiencePageViewerCoodinate.y - 10}px`,
+      }}
+    ></div>
+  );
+}
+```
+
 - **2-3. 드로잉 기능 실시간 동기화**
+
+발표자가 드로잉 기능을 이용 할 때, 청중 페이지에서도 해당 드로잉이 실시간으로 보이도록 구현하고자 했습니다. 이를 위해 마우스 좌표를 실시간으로 공유하고, 양 페이지 간에 상태를 동기화하는 방법을 사용했습니다.
+
+1. 마우스 이벤트를 통한 드로잉 기능 구현
+
+사용자가 마우스를 클릭하고 드래그하면, 드로잉이 시작되고, 마우스가 이동할 때마다 좌표를 업데이트합니다. 이를 위해 onMouseDown, onMouseMove, onMouseUp, onMouseLeave 이벤트를 사용하여 드로잉 기능을 구현했습니다.
+
+2. 드로잉 좌표값 배열에 저장 후 localStorage에 실시간 전송
+
+Canvas에 그려진 그림은 결국 좌표를 이용한 것이기 때문에, 드로잉을 하고 있는 좌표를 실시간으로 배열에 저장한 후, 해당 배열을 localStorage에 실시간으로 전송하고 받아오는 방식으로 드로잉 실시간 동기화를 구현하였습니다.
+
+```jsx
+function handleStartDrawing(event) {
+  const startCoordinateX = event.nativeEvent.offsetX;
+  const startCoordinateY = event.nativeEvent.offsetY;
+  setIsDrawing(true);
+  setCoordinate({ x: startCoordinateX, y: startCoordinateY });
+}
+
+function handleDrawing(event) {
+  if (!isDrawing) return;
+  const finishCoordinateX = event.nativeEvent.offsetX;
+  const finishCoordinateY = event.nativeEvent.offsetY;
+  const saveCoordinate = {
+    startCoordinateX: coordinate.x,
+    startCoordinateY: coordinate.y,
+    finishCoordinateX,
+    finishCoordinateY,
+  };
+  setCoordinateList([...coordinateList, saveCoordinate]);
+  setCoordinate({ x: finishCoordinateX, y: finishCoordinateY });
+  localStorage.setItem("coordinateList", JSON.stringify(coordinateList));
+}
+
+function handleFinishDrawing() {
+  setIsDrawing(false);
+}
+
+useEffect(() => {
+  function getDrawingData() {
+    const savedCoordinateList = JSON.parse(
+      localStorage.getItem("coordinateList")
+    );
+    setCoordinateList(savedCoordinateList);
+  }
+  addEventListener("storage", getDrawingData);
+  return () => removeEventListener("storage", getDrawingData);
+}, []);
+```
 
 ## 트러블슈팅
 
 ### 1. 최적화 문제
 
+- 문제상황: 웹사이트 메모리 사용량이 1GB가 넘어가는 상황이였으며, 실시간 동기화가 잦은 마우스 좌표값의 문제라고 판단했습니다.
+
+- 해결방안
+
+**1-1. storage event useEffect사용**
+
+```jsx
+useEffect(() => {
+  function getCursorCoordinate() {
+    const coordX = Number(localStorage.getItem("coordX"));
+    const coordY = Number(localStorage.getItem("coordY"));
+
+    setCoordinate({ x: coordX, y: coordY });
+  }
+
+  addEventListener("storage", getCursorCoordinate);
+
+  return () => {
+    removeEventListener("storage", getCursorCoordinate);
+  };
+}, []);
+```
+
+- localstorage 이벤트 함수는 localstorage의 데이터가 변경될 시 콜백함수를 실행합니다.
+- 데이터가 변경되는 시점을 알아야하기 때문에 함수는 상시 localstorage를 주시할 수 밖에 없어 이에 따른 메모리 누수가 일어나고 있었습니다.
+- 이를 방지하기 위해 useEffect를 사용해서 외부 storage와 동기화를 하여 필요 시에만 실행되고, 클린업 함수를 통해 컴포넌트가 언마운트되면 이벤트를 삭제해주어 메모리 누수를 완화하였습니다.
+
+**1-2. Map 사용시 키값으로 index가 아닌 유니크한 키값 부여**
+
+→ 키 값으로 index 이용 시 리액트는 데이터가 변경되었는지 알 수 없어 매번 배열을 재생성하기 때문에 불필요한 렌더링이 일어나고 있었습니다.
+
 ### 2. 드로잉 버튼 클릭 시 canvas 크기가 임의로 변경되는 문제
 
+- 문제상황
+
+드로잉 버튼 클릭 시 발표자 페이지에서만 Canvas 태그의 Width, Height 값이 2배로 증가하는 오류가 발견되었습니다. 이로 인해 양 페이지 간 싱크가 맞지 않아서 드로잉 기능의 싱크가 맞지 않게 되었고, 원인을 찾던 중 양 페이지 중 하나를 다른 모니터로 이동 시, 이동한 페이지만 pdf크기가 증가하는 것을 발견했습니다.
+
+pdf 크기에 대한 CSS 속성 값은 변화했으나, 실제 렌더링되고 있는 크기는 변화하지 않는 것이였습니다. 정확한 원인은 라이브러리 문제라고 판단되었으나, 해당 문제로 인해 라이브러리를 변경하는 것은 섣부른 판단이라고 생각하여 다른 방법을 모색하였습니다.
+
+- 해결방안
+
+Canvas의 크기를 pdf파일의 크기에 맞춰 생성하기 위해 useRef를 이용하여 pdf파일 엘리먼트에 접근하여 Width, height 값을 가져오고 있었습니다.
+useRef는 재렌더링 되지 않아도, 변화하는 데이터는 계속 참조를 하고 있으며, CSS 속성을 기준으로 값을 반환하기에 다른 방법이 필요했습니다.
+
+이에 CSS 속성값이 아닌 실제 브라우저 렌더링 된 엘리컨트의 Width, height 값을 제공해주는 getBoundingClientRect() 메소드를 사용하여 이를 해결하였습니다.
+
 ## 기획자
+
+이종석(josuk0212@gmail.com)
