@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/658f3dff-48c4-4f71-bcf3-88dabb1f9a16">
+</p>
+
 ## 목차
 
 1. [Presentation Day](#presentation-day)
