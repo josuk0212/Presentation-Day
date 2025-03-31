@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/658f3dff-48c4-4f71-bcf3-88dabb1f9a16">
+  <img src="https://github.com/user-attachments/assets/28a95353-1536-4703-a139-5b266139d17b">
 </p>
 
 ## 목차
@@ -49,7 +49,7 @@
 
 태그 이용 시 아래 사진과 같이 브라우저에 내장된 Pdf뷰어로 표시되어 뷰어형식을 원하는대로 커스텀이 불가하여 원하는 방향으로 개발을 할 수 없다고 판단했습니다.
 
-<img width="1013" alt="Image" src="https://github.com/user-attachments/assets/08223283-5981-4bbf-8971-af056808f2a9" />
+<img width="991" alt="Image" src="https://github.com/user-attachments/assets/9be7f684-0eba-472d-9c30-218cc081aeb1" />
 
 - **1-2. window.write() method 사용 → 실패**
 
@@ -105,7 +105,7 @@ canvas 태그를 이용해서 웹사이트에 PDF 렌더링만 도와주며, 이
 
 양 페이지 간 마우스 실시간 동기화는 이루어졌지만, 발표자 페이지의 마우스 좌표값이 기준이 되기 때문에, 청중 페이지에서는 전체화면을 이용하기 때문에 해상도, 레이아웃 등의 차이로 청중 페이지 내에서는 원하는 지점에 마우스 커서 포인터가 위치해 있지 않았습니다.
 
-![Image](https://github.com/user-attachments/assets/e4e2f6ad-a2f3-48cb-b581-5706d0deca36)
+![Image](https://github.com/user-attachments/assets/cfb25ba1-bd81-452b-a29b-3684cb1e2509)
 
 > `screenXY`: 모니터 기준 좌표값
 
@@ -218,7 +218,7 @@ useEffect(() => {
 
 웹사이트 메모리 사용량이 1GB가 넘어가는 상황이였으며, 실시간 동기화가 잦은 마우스 좌표값의 문제라고 판단했습니다.
 
-<img width="228" alt="Image" src="https://github.com/user-attachments/assets/138742a8-881e-4457-ba32-b74a202f0615" />
+<img width="228" alt="Image" src="https://github.com/user-attachments/assets/ba845c28-46a8-4496-b46a-50856a6ec623" />
 
 **- 해결방안**
 
