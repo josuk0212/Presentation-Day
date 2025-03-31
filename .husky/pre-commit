@@ -1,3 +1,4 @@
 npm run format
 npm run lint
+npx markdown-toc -i README.md
 git add .
