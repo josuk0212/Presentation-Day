@@ -17,10 +17,10 @@
 - [챌린지](#%EC%B1%8C%EB%A6%B0%EC%A7%80)
   * [1. PDF파일 렌더링](#1-pdf%ED%8C%8C%EC%9D%BC-%EB%A0%8C%EB%8D%94%EB%A7%81)
   * [2. 사용자 로컬 PDF파일 불러오기](#2-%EC%82%AC%EC%9A%A9%EC%9E%90-%EB%A1%9C%EC%BB%AC-pdf%ED%8C%8C%EC%9D%BC-%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0)
-    + [2-1. input 태그 타입 속성 file 이용](#2-1-input-%ED%83%9C%EA%B7%B8-%ED%83%80%EC%9E%85-%EC%86%8D%EC%84%B1-file-%EC%9D%B4%EC%9A%A9)
-    + [2-2. createObjectURL을 이용한 PDF파일 URL처리](#2-2-createobjecturl%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-pdf%ED%8C%8C%EC%9D%BC-url%EC%B2%98%EB%A6%AC)
+    + [2-1. input 태그 타입 속성 file 이용하여 사용자가 원하는 PDF파일 업로드](#2-1-input-%ED%83%9C%EA%B7%B8-%ED%83%80%EC%9E%85-%EC%86%8D%EC%84%B1-file-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B0%80-%EC%9B%90%ED%95%98%EB%8A%94-pdf%ED%8C%8C%EC%9D%BC-%EC%97%85%EB%A1%9C%EB%93%9C)
+    + [2-2. createObjectURL을 이용하여 PDF파일 렌더링을 위한 URL처리](#2-2-createobjecturl%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-pdf%ED%8C%8C%EC%9D%BC-%EB%A0%8C%EB%8D%94%EB%A7%81%EC%9D%84-%EC%9C%84%ED%95%9C-url%EC%B2%98%EB%A6%AC)
   * [3. 발표자 페이지와 청중 페이지 싱크 맞추기](#3-%EB%B0%9C%ED%91%9C%EC%9E%90-%ED%8E%98%EC%9D%B4%EC%A7%80%EC%99%80-%EC%B2%AD%EC%A4%91-%ED%8E%98%EC%9D%B4%EC%A7%80-%EC%8B%B1%ED%81%AC-%EB%A7%9E%EC%B6%94%EA%B8%B0)
-    + [3-1. 양 페이지 간 실시간 동기화](#3-1-%EC%96%91-%ED%8E%98%EC%9D%B4%EC%A7%80-%EA%B0%84-%EC%8B%A4%EC%8B%9C%EA%B0%84-%EB%8F%99%EA%B8%B0%ED%99%94)
+    + [3-1. 양 페이지 간 상태 실시간 동기화](#3-1-%EC%96%91-%ED%8E%98%EC%9D%B4%EC%A7%80-%EA%B0%84-%EC%83%81%ED%83%9C-%EC%8B%A4%EC%8B%9C%EA%B0%84-%EB%8F%99%EA%B8%B0%ED%99%94)
     + [3-2. 마우스 이동 실시간 동기화](#3-2-%EB%A7%88%EC%9A%B0%EC%8A%A4-%EC%9D%B4%EB%8F%99-%EC%8B%A4%EC%8B%9C%EA%B0%84-%EB%8F%99%EA%B8%B0%ED%99%94)
     + [3-3. 드로잉 기능 실시간 동기화](#3-3-%EB%93%9C%EB%A1%9C%EC%9E%89-%EA%B8%B0%EB%8A%A5-%EC%8B%A4%EC%8B%9C%EA%B0%84-%EB%8F%99%EA%B8%B0%ED%99%94)
       - [3-3-1. 마우스 이벤트를 통한 드로잉 기능 구현](#3-3-1-%EB%A7%88%EC%9A%B0%EC%8A%A4-%EC%9D%B4%EB%B2%A4%ED%8A%B8%EB%A5%BC-%ED%86%B5%ED%95%9C-%EB%93%9C%EB%A1%9C%EC%9E%89-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84)
@@ -101,11 +101,11 @@ viewer를 직접 구현하려면 PDF파일을 구문 분석하고 렌더링할 �
 
 ## 2. 사용자 로컬 PDF파일 불러오기
 
-### 2-1. input 태그 타입 속성 file 이용
+### 2-1. input 태그 타입 속성 file 이용하여 사용자가 원하는 PDF파일 업로드
 
 input 태그의 타입 속성인 file을 이용하여, 사용자가 원하는 파일을 업로드 할 수 있도록 했습니다.
 
-### 2-2. createObjectURL을 이용한 PDF파일 URL처리
+### 2-2. createObjectURL을 이용하여 PDF파일 렌더링을 위한 URL처리
 
 - **createObjectURL vs readAsDataURL(속도 및 메모리 사용량 최우선 고려)**
 
@@ -129,7 +129,7 @@ PDF파일을 웹사이트에 렌더링하기 위해선 사용자가 선택한 �
 
 발표자 페이지에서 페이지 이동, 마우스 이동, 드로잉 등의 기능 사용 시 청중 페이지에서도 실시간으로 동일하게 작동이 되게 구현하고자 했습니다.
 
-### 3-1. 양 페이지 간 실시간 동기화
+### 3-1. 양 페이지 간 상태 실시간 동기화
 
 → `broadcast message API`, `localStorage` 사용
 
@@ -276,7 +276,7 @@ useEffect(() => {
 
 웹사이트 메모리 사용량이 1GB가 넘어가는 상황이였으며, 실시간 동기화가 잦은 마우스 좌표값의 문제라고 판단했습니다.
 
-<img width="228" alt="Image" src="https://github.com/user-attachments/assets/ba845c28-46a8-4496-b46a-50856a6ec623" />
+<img width="300" alt="Image" src="https://github.com/user-attachments/assets/ba845c28-46a8-4496-b46a-50856a6ec623" />
 
 - **해결방안**
 
