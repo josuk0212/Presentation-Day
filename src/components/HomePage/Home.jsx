@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router";
 
 import useFileStore from "../../stores/useFileStore";
 import useOnOffStore from "../../stores/useOnOffStore";
@@ -12,7 +13,20 @@ function Home() {
   const { pdfUrl } = useFileStore();
   const { setIsFullScreen } = useOnOffStore();
 
+  const navigate = useNavigate();
   const buttonTitle = "Go to Presentation!";
+
+  useEffect(() => {
+    function isMobile() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+    }
+
+    if (isMobile()) {
+      navigate("/Mobile");
+    }
+  }, [navigate]);
 
   function handlePresentationMode() {
     setIsModal(true);
