@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router";
 
 import Home from "./HomePage/Home";
+import MobilePage from "./MobilePage/mobilePage";
 import SpeakerPage from "./PresentationPage/SpeakerPage";
 
 function App() {
@@ -13,6 +14,10 @@ function App() {
       <Route
         path="/Speaker"
         element={<SpeakerPage />}
+      />
+      <Route
+        path="/Mobile"
+        element={<MobilePage />}
       />
     </Routes>
   );
