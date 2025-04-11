@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router";
 
 import Home from "./HomePage/Home";
-import MobilePage from "./MobilePage/mobilePage";
+import MobilePage from "./MobilePage/MobilePage";
 import SpeakerPage from "./PresentationPage/SpeakerPage";
 
 function App() {
