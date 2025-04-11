@@ -1,4 +1,21 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
+
 function MobilePage() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    function isMobile() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+    }
+
+    if (!isMobile()) {
+      navigate("/");
+    }
+  }, [navigate]);
+
   return (
     <div className="bg-background flex items-center justify-center min-h-screen px-4">
       <div className="text-center">
