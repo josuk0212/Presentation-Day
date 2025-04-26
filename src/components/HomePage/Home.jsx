@@ -67,20 +67,14 @@ function Home() {
                 </div>
               </div>
             )}
-            <div className="flex flex-col justify-center items-center w-full h-full">
-              <div className="flex flex-col gap-36">
-                <div>
-                  <FileUpload />
-                </div>
-                <div className="flex justify-center">
-                  {pdfUrl && (
-                    <BlackButton
-                      onClickEvent={handlePresentationMode}
-                      title={buttonTitle}
-                    />
-                  )}
-                </div>
-              </div>
+            <div className="flex flex-col items-center bg-white rounded-2xl shadow-lg p-12 gap-10 w-[400px]">
+              <FileUpload />
+              {pdfUrl && (
+                <BlackButton
+                  onClickEvent={handlePresentationMode}
+                  title={buttonTitle}
+                />
+              )}
             </div>
           </div>
         </div>
