@@ -13,9 +13,33 @@ function FileUpload() {
     }
   }
 
+  function handleDragOver(event) {
+    event.preventDefault();
+  }
+
+  function handleDragLeave(event) {
+    event.preventDefault();
+  }
+
+  function handleDropFile(event) {
+    event.preventDefault();
+    const file = event.dataTransfer.files;
+    const pdfUrl = URL.createObjectURL(file[0]);
+
+    if (file[0]) {
+      setPdfUrl(pdfUrl);
+      localStorage.setItem("pdfUrl", pdfUrl);
+    }
+  }
+
   return (
     <>
-      <label className="flex items-center justify-center w-full max-w-xs h-44 border-2 border-dashed rounded-md">
+      <label
+        className="flex items-center justify-center w-full max-w-xs h-44 border-2 border-dashed rounded-md"
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDropFile}
+      >
         <input
           type="file"
           accept="image/*, .pdf"
