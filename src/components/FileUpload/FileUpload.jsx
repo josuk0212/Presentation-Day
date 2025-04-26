@@ -3,14 +3,19 @@ import useFileStore from "../../stores/useFileStore";
 function FileUpload() {
   const { setPdfUrl } = useFileStore();
 
-  function handleFileChange(event) {
-    const file = Array.from(event.target.files);
-    const pdfUrl = URL.createObjectURL(file[0]);
-
-    if (file[0]) {
-      setPdfUrl(pdfUrl);
-      localStorage.setItem("pdfUrl", pdfUrl);
+  function fileUpload(file) {
+    if (!file) {
+      return;
     }
+
+    const pdfUrl = URL.createObjectURL(file);
+    setPdfUrl(pdfUrl);
+    localStorage.setItem("pdfUrl", pdfUrl);
+  }
+
+  function handleFileChange(event) {
+    const file = event.target.files[0];
+    fileUpload(file);
   }
 
   function handleDragOver(event) {
@@ -23,13 +28,8 @@ function FileUpload() {
 
   function handleDropFile(event) {
     event.preventDefault();
-    const file = event.dataTransfer.files;
-    const pdfUrl = URL.createObjectURL(file[0]);
-
-    if (file[0]) {
-      setPdfUrl(pdfUrl);
-      localStorage.setItem("pdfUrl", pdfUrl);
-    }
+    const file = event.dataTransfer.files[0];
+    fileUpload(file);
   }
 
   return (
