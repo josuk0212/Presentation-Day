@@ -57,26 +57,20 @@ function Home() {
         </p>
       </div>
       {isModal && <Modal setIsModal={setIsModal} />}
-      <div className="flex justify-center items-center w-full h-full bg-background">
-        <div>
-          <div className="flex items-center gap-20">
-            {pdfUrl && (
-              <div className="border-4 rounded-xl bg-white border-primary">
-                <div className="mt-10 mr-10 ml-20 mb-10">
-                  <DocumentViewer pdfUrl={pdfUrl} />
-                </div>
-              </div>
-            )}
-            <div className="flex flex-col items-center bg-white rounded-2xl shadow-lg p-12 gap-10 w-[400px]">
-              <FileUpload />
-              {pdfUrl && (
-                <BlackButton
-                  onClickEvent={handlePresentationMode}
-                  title={buttonTitle}
-                />
-              )}
-            </div>
+      <div className="flex justify-center items-center gap-20 py-12">
+        {pdfUrl && (
+          <div className="bg-white rounded-2xl shadow-lg border border-primary p-8">
+            <DocumentViewer pdfUrl={pdfUrl} />
           </div>
+        )}
+        <div className="flex flex-col items-center bg-white rounded-2xl shadow-lg p-12 gap-10 w-[400px]">
+          <FileUpload />
+          {pdfUrl && (
+            <BlackButton
+              onClickEvent={handlePresentationMode}
+              title={buttonTitle}
+            />
+          )}
         </div>
       </div>
     </div>
