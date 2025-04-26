@@ -49,37 +49,40 @@ function Home() {
   }, [finishPresentationChannel]);
 
   return (
-    <div className="w-screen h-screen bg-background">
-      <div className="flex justify-center items-center h-36 bg-primary">
-        <h1 className="text-white text-5xl">Presentation Day</h1>
+    <div
+      className="w-full min-h-screen bg-primary"
+      style={{
+        backgroundImage: `
+          radial-gradient(at 10% 0%, rgba(160, 180, 255, 0.35) 0%, transparent 50%),
+          radial-gradient(at 90% 20%, rgba(187, 222, 251, 0.3) 0%, transparent 60%),
+          radial-gradient(at 50% 100%, rgba(221, 214, 254, 0.25) 0%, transparent 50%)`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+      }}
+    >
+      <div className="flex flex-col justify-center items-center py-20 text-center">
+        <h1 className="text-6xl font-extrabold text-white mb-6">
+          Presentation Day
+        </h1>
+        <p className="text-2xl text-gray-300 font-normal">
+          PDF로 쉽고 빠르게, 발표를 준비하고 완성하세요.
+        </p>
       </div>
       {isModal && <Modal setIsModal={setIsModal} />}
-      <div className="flex justify-center items-center w-full h-full bg-background">
-        <div>
-          <div className="flex items-center gap-20">
-            {pdfUrl && (
-              <div className="border-4 rounded-xl bg-white border-primary">
-                <div className="mt-10 mr-10 ml-20 mb-10">
-                  <DocumentViewer pdfUrl={pdfUrl} />
-                </div>
-              </div>
-            )}
-            <div className="flex flex-col justify-center items-center w-full h-full">
-              <div className="flex flex-col gap-36">
-                <div>
-                  <FileUpload />
-                </div>
-                <div className="flex justify-center">
-                  {pdfUrl && (
-                    <BlackButton
-                      onClickEvent={handlePresentationMode}
-                      title={buttonTitle}
-                    />
-                  )}
-                </div>
-              </div>
-            </div>
+      <div className="flex justify-center items-start gap-10 px-4 py-20">
+        {pdfUrl && (
+          <div className="flex-1 bg-third border border-[#d1d5db] rounded-xl shadow-lg p-10 min-w-0">
+            <DocumentViewer pdfUrl={pdfUrl} />
           </div>
+        )}
+        <div className="w-[400px] flex-shrink-0 bg-third border border-[#d1d5db] rounded-xl shadow-lg p-2 flex flex-col items-center gap-10">
+          <FileUpload />
+          {pdfUrl && (
+            <BlackButton
+              onClickEvent={handlePresentationMode}
+              title={buttonTitle}
+            />
+          )}
         </div>
       </div>
     </div>
