@@ -50,8 +50,11 @@ function Home() {
 
   return (
     <div className="w-screen h-screen bg-background">
-      <div className="flex justify-center items-center h-36 bg-primary">
-        <h1 className="text-white text-5xl">Presentation Day</h1>
+      <div className="flex flex-col justify-center items-center h-48 bg-primary text-center">
+        <h1 className="text-white text-5xl font-bold">Presentation Day</h1>
+        <p className="text-white text-lg mt-2">
+          PDF로 쉽고 빠르게, 발표를 준비하고 완성하세요.
+        </p>
       </div>
       {isModal && <Modal setIsModal={setIsModal} />}
       <div className="flex justify-center items-center w-full h-full bg-background">
