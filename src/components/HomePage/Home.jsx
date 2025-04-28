@@ -68,21 +68,43 @@ function Home() {
           PDF로 쉽고 빠르게, 발표를 준비하고 완성하세요.
         </p>
       </div>
+
       {isModal && <Modal setIsModal={setIsModal} />}
-      <div className="flex justify-center items-start gap-10 px-4 py-20">
-        {pdfUrl && (
-          <div className="flex-1 bg-third border border-[#d1d5db] rounded-xl shadow-lg p-10 min-w-0">
-            <DocumentViewer pdfUrl={pdfUrl} />
+
+      <div className="flex justify-center items-start gap-20 px-4 py-20">
+        {!pdfUrl && (
+          <div className="max-w-md text-white space-y-6">
+            <h2 className="text-3xl font-bold">사용 방법 안내</h2>
+            <p className="text-lg text-gray-300">
+              PDF 파일을 업로드하고, 발표자 모드 버튼을 눌러보세요.
+            </p>
+            <ol className="list-decimal list-inside space-y-4 text-base text-gray-200">
+              <li>파일을 선택하거나 드래그하여 업로드합니다.</li>
+              <li>
+                파일의 내용을 확인 후 “Go to Presentation!” 버튼을 클릭합니다.
+              </li>
+              <li>새 페이지가 열리면, 다른 기기로 이동 후 사용해주세요.</li>
+              <li>
+                발표자 모드에서 메모, 타이머, 드로잉 기능을 사용할 수 있습니다.
+              </li>
+            </ol>
           </div>
         )}
-        <div className="w-[400px] flex-shrink-0 bg-third border border-[#d1d5db] rounded-xl shadow-lg p-2 flex flex-col items-center gap-10">
-          <FileUpload />
+        <div className="flex items-start gap-4">
           {pdfUrl && (
-            <BlackButton
-              onClickEvent={handlePresentationMode}
-              title={buttonTitle}
-            />
+            <div className="flex-1 bg-third border border-[#d1d5db] rounded-xl shadow-lg p-10 min-w-0">
+              <DocumentViewer pdfUrl={pdfUrl} />
+            </div>
           )}
+          <div className="w-[400px] flex-shrink-0 bg-third border border-[#d1d5db] rounded-xl shadow-lg p-2 flex flex-col items-center gap-10">
+            <FileUpload />
+            {pdfUrl && (
+              <BlackButton
+                onClickEvent={handlePresentationMode}
+                title={buttonTitle}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>
