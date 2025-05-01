@@ -17,8 +17,9 @@
 - [챌린지](#%EC%B1%8C%EB%A6%B0%EC%A7%80)
   * [1. 자유로운 뷰어 구성을 위한 PDF파일 렌더링 방법](#1-%EC%9E%90%EC%9C%A0%EB%A1%9C%EC%9A%B4-%EB%B7%B0%EC%96%B4-%EA%B5%AC%EC%84%B1%EC%9D%84-%EC%9C%84%ED%95%9C-pdf%ED%8C%8C%EC%9D%BC-%EB%A0%8C%EB%8D%94%EB%A7%81-%EB%B0%A9%EB%B2%95)
   * [2. 사용자 로컬 PDF파일 처리 방식](#2-%EC%82%AC%EC%9A%A9%EC%9E%90-%EB%A1%9C%EC%BB%AC-pdf%ED%8C%8C%EC%9D%BC-%EC%B2%98%EB%A6%AC-%EB%B0%A9%EC%8B%9D)
-    + [2-1. input 태그 타입 속성 file 이용하여 사용자가 원하는 PDF파일 업로드](#2-1-input-%ED%83%9C%EA%B7%B8-%ED%83%80%EC%9E%85-%EC%86%8D%EC%84%B1-file-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B0%80-%EC%9B%90%ED%95%98%EB%8A%94-pdf%ED%8C%8C%EC%9D%BC-%EC%97%85%EB%A1%9C%EB%93%9C)
-    + [2-2. createObjectURL을 이용하여 PDF파일 렌더링을 위한 URL처리](#2-2-createobjecturl%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-pdf%ED%8C%8C%EC%9D%BC-%EB%A0%8C%EB%8D%94%EB%A7%81%EC%9D%84-%EC%9C%84%ED%95%9C-url%EC%B2%98%EB%A6%AC)
+    + [2-1. PDF파일 업로드를 위한 클릭 기반 파일 선택 및 드래그 앤 드롭 구현](#2-1-pdf%ED%8C%8C%EC%9D%BC-%EC%97%85%EB%A1%9C%EB%93%9C%EB%A5%BC-%EC%9C%84%ED%95%9C-%ED%81%B4%EB%A6%AD-%EA%B8%B0%EB%B0%98-%ED%8C%8C%EC%9D%BC-%EC%84%A0%ED%83%9D-%EB%B0%8F-%EB%93%9C%EB%9E%98%EA%B7%B8-%EC%95%A4-%EB%93%9C%EB%A1%AD-%EA%B5%AC%ED%98%84)
+    + [2-2. PDF 렌더링을 위한 URL 처리 방식 - createObjectURL](#2-2-pdf-%EB%A0%8C%EB%8D%94%EB%A7%81%EC%9D%84-%EC%9C%84%ED%95%9C-url-%EC%B2%98%EB%A6%AC-%EB%B0%A9%EC%8B%9D---createobjecturl)
+    + [2-3. 생성된 URL을 react-pdf 컴포넌트에 전달하여 PDF 렌더링](#2-3-%EC%83%9D%EC%84%B1%EB%90%9C-url%EC%9D%84-react-pdf-%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8%EC%97%90-%EC%A0%84%EB%8B%AC%ED%95%98%EC%97%AC-pdf-%EB%A0%8C%EB%8D%94%EB%A7%81)
   * [3. 청중 페이지와 발표자 페이지 간 실시간 동기화](#3-%EC%B2%AD%EC%A4%91-%ED%8E%98%EC%9D%B4%EC%A7%80%EC%99%80-%EB%B0%9C%ED%91%9C%EC%9E%90-%ED%8E%98%EC%9D%B4%EC%A7%80-%EA%B0%84-%EC%8B%A4%EC%8B%9C%EA%B0%84-%EB%8F%99%EA%B8%B0%ED%99%94)
     + [3-1. 청중-발표자 화면 싱크를 위한 상태 동기화](#3-1-%EC%B2%AD%EC%A4%91-%EB%B0%9C%ED%91%9C%EC%9E%90-%ED%99%94%EB%A9%B4-%EC%8B%B1%ED%81%AC%EB%A5%BC-%EC%9C%84%ED%95%9C-%EC%83%81%ED%83%9C-%EB%8F%99%EA%B8%B0%ED%99%94)
     + [3-2. 청중 페이지에서 발표자의 마우스 움직임을 실시간으로 시각화하기 위한 마우스 포인터 구현](#3-2-%EC%B2%AD%EC%A4%91-%ED%8E%98%EC%9D%B4%EC%A7%80%EC%97%90%EC%84%9C-%EB%B0%9C%ED%91%9C%EC%9E%90%EC%9D%98-%EB%A7%88%EC%9A%B0%EC%8A%A4-%EC%9B%80%EC%A7%81%EC%9E%84%EC%9D%84-%EC%8B%A4%EC%8B%9C%EA%B0%84%EC%9C%BC%EB%A1%9C-%EC%8B%9C%EA%B0%81%ED%99%94%ED%95%98%EA%B8%B0-%EC%9C%84%ED%95%9C-%EB%A7%88%EC%9A%B0%EC%8A%A4-%ED%8F%AC%EC%9D%B8%ED%84%B0-%EA%B5%AC%ED%98%84)
@@ -128,29 +129,53 @@ PDF를 직접 구문 분석하고 페이지별로 렌더링하는 뷰어를 직�
 
 ## 2. 사용자 로컬 PDF파일 처리 방식
 
-### 2-1. input 태그 타입 속성 file 이용하여 사용자가 원하는 PDF파일 업로드
+사용자가 로컬에 저장된 PDF 파일을 업로드하고, 이를 브라우저에서 렌더링하기까지의 과정은 아래와 같습니다. </br>
+**(1) 파일 업로드 → (2) 파일 URL 생성 → (3) PDF 렌더링**
 
-input 태그의 타입 속성인 file을 이용하여, 사용자가 원하는 파일을 업로드 할 수 있도록 했습니다.
+### 2-1. PDF파일 업로드를 위한 클릭 기반 파일 선택 및 드래그 앤 드롭 구현
 
-### 2-2. createObjectURL을 이용하여 PDF파일 렌더링을 위한 URL처리
+- **클릭 방식**
 
-- **createObjectURL vs readAsDataURL(속도 및 메모리 사용량 최우선 고려)**
+`<input type="file">`을 사용하여 클릭 시 시스템 파일 탐색기가 열리고, 사용자가 원하는 PDF 파일을 선택할 수 있습니다.
 
-![Image](https://github.com/user-attachments/assets/a94742ab-5d8f-4a06-8474-e26b99b6aa2b)
+- **드래그 앤 드롭 방식**
 
-PDF파일을 웹사이트에 렌더링하기 위해선 사용자가 선택한 파일의 고유한 URL을 React-pdf 라이브러리에서 제공하는 컴포넌트에 prop으로 전달해야 했습니다.
+사용자 경험을 개선하고, 직관적인 시각적 효과를 위하여 onDrag 및 onDrop 이벤트를 이용한 드래그 앤 드롭 기능울 구현했습니다.
+이를 통해 사용자는 업로드 영역에 PDF 파일을 드래그하여 보다 간편하게 업로드할 수 있습니다.
 
-파일을 URL처리하기 위해 createObjectURL, readAsDataURL 2가지 방법이 있었습니다. 앞선 두가지 방법 중 데이터의 크기 및 속도에 중점을 두고 채용을 고려했습니다.
+업로드가 완료되면 **File 객체를 통해 선택된 PDF 파일 데이터에 접근**할 수 있으며, 이를 기반으로 URL을 생성하는 다음 단계를 진행합니다.
 
-`속도 측면`: createObjectURL은 브라우저의 내부 메모리에 파일을 저장하고 URL을 생성하기 때문에, 대용량 파일을 다룰 때 유용할 수 있으며  파일을 미리 다운로드하여 로드할 수 있으므로 초기 로딩 시간을 최적화할 수 있기 때문에 상대적으로 빠른 속도를 기대해 볼 수 있었습니다. 반면에 readAsDataURL은 비동기적으로 동작하고, base64로 인코딩 하는 데 시간이 다소 필요하기 때문에 채택하지 않았습니다.
+### 2-2. PDF 렌더링을 위한 URL 처리 방식 - createObjectURL
 
-`메모리 사용량 측면`: createObjectURL은 다양한 길이를 가진 데이터를 고정된 길이를 가진 데이터로 매핑한 url을 제공하고, 파일에 간접적으로 접근하기 위한 포인터를 사용하기 때문에 훨씬 간결한 url을 제공합니다. 반면에 readAsDataURL 사용 시, 파일의 전체 내용을 문자열로 인코딩하여 제공하므로 파일 크기가 큰 경우에는 메모리 부담이 있을 수 있다고 판단하여 createObjectURL을 채택하게 되었습니다.
+react-pdf 라이브러리는 PDF 문서를 렌더링할 때, 파일의 고유한 URL을 prop으로 전달해야 합니다.
+이를 위해 사용자가 업로드한 파일을 URL로 변환하는 작업이 필요하며, 그 과정에서 createObjectURL과 readAsDataURL 두 가지 방식이 존재합니다.
+
+- **createObjectURL vs readAsDataURL(속도와 메모리 사용량을 중심으로 비교)**
+
+<img width="600" alt="Image" src="https://github.com/user-attachments/assets/a94742ab-5d8f-4a06-8474-e26b99b6aa2b" />
+
+`속도 측면`: createObjectURL은 브라우저 메모리에 파일을 저장하고, 해당 파일에 접근 가능한 임시 URL을 생성합니다.
+이 방식은 대용량 파일 처리에 강하며, 파일을 base64로 인코딩하는 과정을 거치지 않기 때문에 **즉시 렌더링 가능한 빠른 처리 속도**를 보장합니다.
+반면, readAsDataURL은 파일을 base64 형식의 문자열로 변환하는 비동기 작업이 필요해 상대적으로 느리고, 렌더링까지의 시간이 더 소요됩니다.
+
+`메모리 사용량 측면`: createObjectURL은 내부적으로 **파일을 직접 인코딩하지 않고 포인터로 참조**하기 때문에 URL 문자열의 크기가 짧고 메모리 사용량이 적습니다.
+반대로 readAsDataURL은 전체 파일을 문자열로 변환하는 구조이기 때문에, 파일 크기가 클수록 메모리 부담이 커질 수 있는 단점이 있습니다.
 
 - **실제 URL 비교**
 
 | createObjectURL                                                                                                       | readAsDataURL                                                                             |
 | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | <img width="484" alt="Image" src="https://github.com/user-attachments/assets/aa05457e-5933-4cf6-bc48-cf860ede514c" /> | ![Image](https://github.com/user-attachments/assets/8035c1b7-b710-4a8f-ac95-f7145d9013ef) |
+
+위의 예시처럼 **createObjectURL은 간결하고 식별 가능한 임시 URL을 생성**하는 반면,
+readAsDataURL은 base64 인코딩된 긴 문자열로 표현되어, 가독성 및 메모리 측면에서 상대적으로 효율성이 떨어집니다.
+
+### 2-3. 생성된 URL을 react-pdf 컴포넌트에 전달하여 PDF 렌더링
+
+createObjectURL을 통해 생성한 임시 **URL은 react-pdf 라이브러리가 제공하는 컴포넌트의 file prop에 전달**됩니다.
+라이브러리는 해당 URL을 기반으로 <canvas> 태그를 통해 PDF 페이지를 브라우저에 렌더링하며, 사용자는 업로드한 PDF 파일을 바로 확인할 수 있습니다.
+
+</br>
 
 ## 3. 청중 페이지와 발표자 페이지 간 실시간 동기화
 
