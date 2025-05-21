@@ -46,15 +46,13 @@ function SpeakerPage() {
   }
 
   return (
-    <div className="w-screen h-screen bg-primary">
+    <div className="w-screen h-screen bg-primary overflow-hidden">
       <div className="flex justify-center items-center w-full h-full">
-        <div className="flex">
-          <div>
-            <div className="flex">
-              <div>
-                <Timer />
-              </div>
-              <div className="flex ml-[60%] gap-4">
+        <div className="flex h-[95vh]">
+          <div className="flex flex-col justify-start">
+            <div className="flex items-center justify-between px-4 pt-2 pb-1">
+              <Timer />
+              <div className="flex ml-auto gap-4">
                 <WhiteButton
                   onClickEvent={handleDrawingToggle}
                   title={drawButtonTitle[0]}
@@ -69,9 +67,9 @@ function SpeakerPage() {
                 />
               </div>
             </div>
-            <div className="flex justify-center items-center mt-2">
-              <div className="border-4 rounded-xl bg-second border-primary">
-                <div className="mt-10 mr-10 ml-20 mb-10">
+            <div className="flex justify-center items-center flex-1 px-6 py-4">
+              <div className="flex-1 bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg overflow-auto">
+                <div className="p-4">
                   <DocumentViewer
                     pdfUrl={pdfUrl}
                     getCursorCoordinate={getCursorCoordinate}
@@ -80,7 +78,7 @@ function SpeakerPage() {
               </div>
             </div>
           </div>
-          <div className="border-2 border-gray-400 mr-2 ml-1"></div>
+          <div className="w-[2px] bg-white/20 shadow-[0_0_4px_rgba(255,255,255,0.15)] mx-6" />
           <div>
             <Memo />
           </div>

@@ -67,12 +67,13 @@ function Memo() {
   }, [pageNumber, memoList]);
 
   return (
-    <div>
+    <div className="flex flex-col w-[300px] h-[93vh] bg-white/10 backdrop-blur-sm border border-white/10 rounded-xl shadow-lg p-4">
       <form
         method="post"
         onSubmit={handleSaveMemo}
+        className="flex flex-col h-full"
       >
-        <div>
+        <div className="flex-1">
           <label>
             <textarea
               name={pageNumber}
@@ -80,14 +81,14 @@ function Memo() {
               value={memo}
               onChange={handleWriteMemo}
               className={
-                "textarea textarea-bordered resize-none w-[300px] h-[850px] bg-second text-white"
+                "textarea textarea-bordered resize-none w-full h-full bg-second text-white overflow-auto"
               }
               style={{ fontSize: `${fontSize}px` }}
             ></textarea>
           </label>
         </div>
-        <div className="flex gap-[34%]">
-          <div className="flex gap-[10%]">
+        <div className="flex justify-between items-center mt-4">
+          <div className="flex gap-2">
             <div>
               <WhiteButton
                 title={buttonTitle[0]}
