@@ -90,7 +90,7 @@ function Home() {
             </ol>
           </div>
         )}
-        <div className="flex items-start gap-4">
+        <div className="flex items-center gap-4">
           {pdfUrl && (
             <div className="flex-1 bg-white/10 border border-white/10 backdrop-blur-sm rounded-2xl shadow-xl p-10 min-w-0">
               <DocumentViewer pdfUrl={pdfUrl} />
