@@ -48,7 +48,7 @@ function SpeakerPage() {
   return (
     <div className="w-screen h-screen bg-primary overflow-hidden">
       <div className="flex justify-center items-center w-full h-full">
-        <div className="flex h-[90vh]">
+        <div className="flex h-[95vh]">
           <div className="flex flex-col justify-start">
             <div className="flex items-center justify-between px-4 pt-2 pb-1">
               <Timer />
@@ -78,7 +78,7 @@ function SpeakerPage() {
               </div>
             </div>
           </div>
-          <div className="border-l-2 border-gray-400 mx-4" />
+          <div className="w-[2px] bg-white/20 shadow-[0_0_4px_rgba(255,255,255,0.15)] mx-6" />
           <div>
             <Memo />
           </div>
