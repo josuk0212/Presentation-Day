@@ -1,13 +1,13 @@
 import { FilePlus } from "lucide-react";
-import { useState } from "react";
+import { ChangeEvent, DragEvent, useState } from "react";
 
 import useFileStore from "../../stores/useFileStore";
 
 function FileUpload() {
-  const [isDragging, setIsDragging] = useState(false);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
   const { setPdfUrl } = useFileStore();
 
-  function fileUpload(file) {
+  function fileUpload(file: File | null): void {
     if (!file) {
       return;
     }
@@ -17,25 +17,25 @@ function FileUpload() {
     localStorage.setItem("pdfUrl", pdfUrl);
   }
 
-  function handleFileChange(event) {
-    const file = event.target.files[0];
+  function handleFileChange(event: ChangeEvent<HTMLInputElement>): void {
+    const file = event.target.files?.[0] || null;
     fileUpload(file);
   }
 
-  function handleDragOver(event) {
+  function handleDragOver(event: DragEvent<HTMLLabelElement>): void {
     event.preventDefault();
     setIsDragging(true);
   }
 
-  function handleDragLeave(event) {
+  function handleDragLeave(event: DragEvent<HTMLLabelElement>): void {
     event.preventDefault();
     setIsDragging(false);
   }
 
-  function handleDropFile(event) {
+  function handleDropFile(event: DragEvent<HTMLLabelElement>): void {
     event.preventDefault();
     setIsDragging(false);
-    const file = event.dataTransfer.files[0];
+    const file = event.dataTransfer.files[0] || null;
     fileUpload(file);
   }
 
