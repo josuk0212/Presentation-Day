@@ -5,7 +5,7 @@ function MobilePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    function isMobile() {
+    function isMobile(): boolean {
       return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent
       );
