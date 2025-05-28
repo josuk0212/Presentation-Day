@@ -1,6 +1,11 @@
 import { create } from "zustand";
 
-const useFileStore = create((set) => ({
+interface FileStore {
+  pdfUrl: string;
+  setPdfUrl: (state: string) => void;
+}
+
+const useFileStore = create<FileStore>((set) => ({
   pdfUrl: "",
   setPdfUrl: (state) => set({ pdfUrl: state }),
 }));

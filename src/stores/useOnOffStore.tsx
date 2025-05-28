@@ -1,6 +1,17 @@
 import { create } from "zustand";
 
-const useOnOffStore = create((set) => ({
+interface OnOffStore {
+  isFullScreen: boolean;
+  isDisplayDrawing: boolean;
+  isClearDrawing: boolean;
+  isCloseSpeakerPage: boolean;
+  setIsFullScreen: (state: boolean) => void;
+  setIsDisplayDrawing: (state: boolean) => void;
+  setIsClearDrawing: (state: boolean) => void;
+  setIsCloseSpeakerPage: (state: boolean) => void;
+}
+
+const useOnOffStore = create<OnOffStore>((set) => ({
   isFullScreen: false,
   isDisplayDrawing: false,
   isClearDrawing: false,
