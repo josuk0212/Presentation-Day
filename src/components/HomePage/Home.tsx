@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 
 import useFileStore from "../../stores/useFileStore";
@@ -8,8 +8,8 @@ import Modal from "../PresentationMode/Modal";
 import { BlackButton } from "../Share/Button";
 import DocumentViewer from "../ViewDocument/DocumentViewer";
 
-function Home() {
-  const [isModal, setIsModal] = useState(false);
+function Home(): React.ReactElement {
+  const [isModal, setIsModal] = useState<boolean>(false);
   const { pdfUrl } = useFileStore();
   const { setIsFullScreen } = useOnOffStore();
 
@@ -17,7 +17,7 @@ function Home() {
   const buttonTitle = "Go to Presentation!";
 
   useEffect(() => {
-    function isMobile() {
+    function isMobile(): boolean {
       return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent
       );
@@ -28,7 +28,7 @@ function Home() {
     }
   }, [navigate]);
 
-  function handlePresentationMode() {
+  function handlePresentationMode(): void {
     setIsModal(true);
     window.open("https://presentation-day.today/Speaker");
   }
@@ -39,14 +39,16 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    finishPresentationChannel.onmessage = (shareState) => {
+    finishPresentationChannel.onmessage = (shareState: MessageEvent): void => {
       if (shareState.data) {
         setIsModal(false);
         setIsFullScreen(false);
         document.exitFullscreen();
       }
     };
-  }, [finishPresentationChannel]);
+  }, [finishPresentationChannel, setIsFullScreen]);
+
+  function getCursorCoordinate(event: React.MouseEvent): void {}
 
   return (
     <div
@@ -81,7 +83,7 @@ function Home() {
             <ol className="list-decimal list-inside space-y-4 text-base text-gray-200">
               <li>파일을 선택하거나 드래그하여 업로드합니다.</li>
               <li>
-                파일의 내용을 확인 후 “Go to Presentation!” 버튼을 클릭합니다.
+                파일의 내용을 확인 후 "Go to Presentation!" 버튼을 클릭합니다.
               </li>
               <li>새 페이지가 열리면, 다른 기기로 이동 후 사용해주세요.</li>
               <li>
@@ -93,7 +95,10 @@ function Home() {
         <div className="flex items-center gap-4">
           {pdfUrl && (
             <div className="flex-1 bg-white/10 border border-white/10 backdrop-blur-sm rounded-2xl shadow-xl p-10 min-w-0">
-              <DocumentViewer pdfUrl={pdfUrl} />
+              <DocumentViewer
+                pdfUrl={pdfUrl}
+                getCursorCoordinate={getCursorCoordinate}
+              />
             </div>
           )}
           <div className="w-[400px] flex-shrink-0 bg-third border border-[#d1d5db] rounded-xl shadow-lg p-2 flex flex-col items-center gap-10">
