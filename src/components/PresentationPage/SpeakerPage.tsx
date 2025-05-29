@@ -1,10 +1,12 @@
+import React from "react";
+
 import useOnOffStore from "../../stores/useOnOffStore";
 import Memo from "../PresentationMode/Memo";
 import Timer from "../PresentationMode/Timer";
 import { WhiteButton } from "../Share/Button";
 import DocumentViewer from "../ViewDocument/DocumentViewer";
 
-function SpeakerPage() {
+function SpeakerPage(): React.ReactElement {
   const {
     isDisplayDrawing,
     isCloseSpeakerPage,
@@ -17,18 +19,18 @@ function SpeakerPage() {
   const finishPresentationChannel = new BroadcastChannel("finish");
   finishPresentationChannel.postMessage(isCloseSpeakerPage);
 
-  const drawButtonTitle = ["🖍️", "🧽"];
+  const drawButtonTitle = ["🖍️", "🧽"] as const;
   const closeButtonTitle = "X";
 
-  function getCursorCoordinate(event) {
+  function getCursorCoordinate(event: React.MouseEvent<HTMLDivElement>): void {
     const coordX = event.nativeEvent.offsetX;
     const coordY = event.nativeEvent.offsetY;
 
-    localStorage.setItem("coordX", coordX);
-    localStorage.setItem("coordY", coordY);
+    localStorage.setItem("coordX", coordX.toString());
+    localStorage.setItem("coordY", coordY.toString());
   }
 
-  function handleDrawingToggle() {
+  function handleDrawingToggle(): void {
     if (!isDisplayDrawing) {
       setIsDisplayDrawing(true);
     } else {
@@ -36,11 +38,11 @@ function SpeakerPage() {
     }
   }
 
-  function handleClearDrawing() {
+  function handleClearDrawing(): void {
     setIsClearDrawing(true);
   }
 
-  function handleCloseSpeakerPage() {
+  function handleCloseSpeakerPage(): void {
     setIsCloseSpeakerPage(true);
     window.close();
   }
@@ -70,10 +72,12 @@ function SpeakerPage() {
             <div className="flex justify-center items-center flex-1 px-6 py-4">
               <div className="flex-1 bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg overflow-auto">
                 <div className="p-4">
-                  <DocumentViewer
-                    pdfUrl={pdfUrl}
-                    getCursorCoordinate={getCursorCoordinate}
-                  />
+                  {pdfUrl && (
+                    <DocumentViewer
+                      pdfUrl={pdfUrl}
+                      getCursorCoordinate={getCursorCoordinate}
+                    />
+                  )}
                 </div>
               </div>
             </div>
