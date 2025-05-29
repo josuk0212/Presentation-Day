@@ -1,16 +1,24 @@
-import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-function CursorPointer({ pdfRef }) {
-  const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
+interface Coordinate {
+  x: number;
+  y: number;
+}
+
+interface CursorPointerProps {
+  pdfRef: React.RefObject<HTMLCanvasElement>;
+}
+
+function CursorPointer({ pdfRef }: CursorPointerProps): React.ReactElement {
+  const [coordinate, setCoordinate] = useState<Coordinate>({ x: 0, y: 0 });
   const [audiencePageViewerCoodinate, setAudiencePageViewerCoodinate] =
-    useState({ x: 0, y: 0 });
+    useState<Coordinate>({ x: 0, y: 0 });
 
   useEffect(() => {
-    function getCursorCoordinate() {
+    function getCursorCoordinate(): void {
       const coordX = Number(localStorage.getItem("coordX"));
       const coordY = Number(localStorage.getItem("coordY"));
-      const fullScreenViewerCoodinate = pdfRef.current.getBoundingClientRect();
+      const fullScreenViewerCoodinate = pdfRef.current!.getBoundingClientRect();
 
       setAudiencePageViewerCoodinate({
         x: fullScreenViewerCoodinate.x,
@@ -38,7 +46,3 @@ function CursorPointer({ pdfRef }) {
 }
 
 export default CursorPointer;
-
-CursorPointer.propTypes = {
-  pdfRef: PropTypes.object.isRequired,
-};
