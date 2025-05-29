@@ -1,15 +1,20 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { WhiteButton } from "../Share/Button";
 
-function Memo() {
-  const [fontSize, setFontSize] = useState(20);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [totalPageNumber, setTotalPageNumber] = useState(0);
-  const [memo, setMemo] = useState("");
-  const [memoList, setMemoList] = useState([]);
+interface MemoItem {
+  id: number;
+  memo: string;
+}
 
-  const buttonTitle = ["+", "-"];
+function Memo(): React.ReactElement {
+  const [fontSize, setFontSize] = useState<number>(20);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [totalPageNumber, setTotalPageNumber] = useState<number>(0);
+  const [memo, setMemo] = useState<string>("");
+  const [memoList, setMemoList] = useState<MemoItem[]>([]);
+
+  const buttonTitle = ["+", "-"] as const;
 
   const memoChannel = useMemo(() => {
     const channel = new BroadcastChannel("path");
@@ -17,13 +22,15 @@ function Memo() {
   }, []);
 
   useEffect(() => {
-    memoChannel.onmessage = (shareState) => {
+    memoChannel.onmessage = (shareState: MessageEvent): void => {
       setPageNumber(shareState.data[0]);
       setTotalPageNumber(shareState.data[2]);
     };
   }, [memoChannel]);
 
-  function handleWriteMemo(event) {
+  function handleWriteMemo(
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ): void {
     const memoText = event.target.value;
     setMemo(memoText);
   }
@@ -38,28 +45,29 @@ function Memo() {
     setMemoList(memoList);
   }, [totalPageNumber]);
 
-  function handleSaveMemo(event) {
+  function handleSaveMemo(event: React.FormEvent<HTMLFormElement>): void {
     event.preventDefault();
-    const saveMemo = new FormData(event.target);
-
-    fetch({ method: event.target.method, body: saveMemo });
-
+    const form = event.currentTarget;
+    const saveMemo = new FormData(form);
     const getMemo = Object.fromEntries(saveMemo.entries());
-    const memos = { id: pageNumber, memo: getMemo[pageNumber] };
+    const memos: MemoItem = {
+      id: pageNumber,
+      memo: getMemo[pageNumber] as string,
+    };
 
     setMemoList((prev) => [...prev, memos]);
   }
 
-  function handleIncreaseFontSize() {
+  function handleIncreaseFontSize(): void {
     setFontSize(fontSize + 1);
   }
 
-  function handleDecreaseFontSize() {
+  function handleDecreaseFontSize(): void {
     setFontSize(fontSize - 1);
   }
 
   useEffect(() => {
-    memoList.map((item) => {
+    memoList.forEach((item) => {
       if (item.id === pageNumber) {
         setMemo(item.memo);
       }
@@ -76,15 +84,13 @@ function Memo() {
         <div className="flex-1">
           <label>
             <textarea
-              name={pageNumber}
+              name={pageNumber.toString()}
               placeholder="글자를 입력해주세요"
               value={memo}
               onChange={handleWriteMemo}
-              className={
-                "textarea textarea-bordered resize-none w-full h-full bg-second text-white overflow-auto"
-              }
+              className="textarea textarea-bordered resize-none w-full h-full bg-second text-white overflow-auto"
               style={{ fontSize: `${fontSize}px` }}
-            ></textarea>
+            />
           </label>
         </div>
         <div className="flex justify-between items-center mt-4">
