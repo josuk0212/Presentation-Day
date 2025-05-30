@@ -1,17 +1,32 @@
-import PropTypes from "prop-types";
-import { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import useOnOffStore from "../../stores/useOnOffStore";
 
-function Drawing({ pdfRef }) {
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [isShowDrawing, setIsShowDrawing] = useState(false);
-  const [coordinate, setCoordinate] = useState({ x: 0, y: 0 });
-  const [coordinateList, setCoordinateList] = useState([]);
-  const [pageNumber, setPageNumber] = useState(1);
+interface DrawingProps {
+  pdfRef: React.RefObject<HTMLCanvasElement>;
+}
+
+interface Coordinate {
+  x: number;
+  y: number;
+}
+
+interface SavedCoordinate {
+  startCoordinateX: number;
+  startCoordinateY: number;
+  finishCoordinateX: number;
+  finishCoordinateY: number;
+}
+
+function Drawing({ pdfRef }: DrawingProps): React.ReactElement {
+  const [isDrawing, setIsDrawing] = useState<boolean>(false);
+  const [isShowDrawing, setIsShowDrawing] = useState<boolean>(false);
+  const [coordinate, setCoordinate] = useState<Coordinate>({ x: 0, y: 0 });
+  const [coordinateList, setCoordinateList] = useState<SavedCoordinate[]>([]);
+  const [pageNumber, setPageNumber] = useState<number>(1);
   const { isDisplayDrawing, isClearDrawing, isFullScreen, setIsClearDrawing } =
     useOnOffStore();
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const canvasChannel = useMemo(() => {
     const channel = new BroadcastChannel("path");
@@ -25,11 +40,11 @@ function Drawing({ pdfRef }) {
   }, [isDisplayDrawing]);
 
   useEffect(() => {
-    canvasChannel.onmessage = (shareState) => {
+    canvasChannel.onmessage = (shareState: MessageEvent): void => {
       setPageNumber(shareState.data);
     };
 
-    toggleChannel.onmessage = (shareState) => {
+    toggleChannel.onmessage = (shareState: MessageEvent): void => {
       setIsShowDrawing(shareState.data);
     };
   }, [canvasChannel, toggleChannel]);
@@ -40,33 +55,31 @@ function Drawing({ pdfRef }) {
     }
     const pdfSize = pdfRef.current.getBoundingClientRect();
     const canvas = canvasRef.current;
+    if (!canvas) return;
+
     canvas.width = pdfSize.width;
     canvas.height = pdfSize.height;
 
     const context = canvas.getContext("2d");
-    context.strokestyle = "black";
+    if (!context) return;
+
+    context.strokeStyle = "black";
     context.lineWidth = 2.5;
 
-    function drawCoordinate(context) {
+    function drawCoordinate(ctx: CanvasRenderingContext2D): void {
       if (!isFullScreen) {
         coordinateList.forEach((coord) => {
-          context.beginPath();
-          context.moveTo(coord.startCoordinateX, coord.startCoordinateY);
-          context.lineTo(coord.finishCoordinateX, coord.finishCoordinateY);
-          context.stroke();
+          ctx.beginPath();
+          ctx.moveTo(coord.startCoordinateX, coord.startCoordinateY);
+          ctx.lineTo(coord.finishCoordinateX, coord.finishCoordinateY);
+          ctx.stroke();
         });
       } else {
         coordinateList.forEach((coord) => {
-          context.beginPath();
-          context.moveTo(
-            coord.startCoordinateX * 2,
-            coord.startCoordinateY * 2
-          );
-          context.lineTo(
-            coord.finishCoordinateX * 2,
-            coord.finishCoordinateY * 2
-          );
-          context.stroke();
+          ctx.beginPath();
+          ctx.moveTo(coord.startCoordinateX * 2, coord.startCoordinateY * 2);
+          ctx.lineTo(coord.finishCoordinateX * 2, coord.finishCoordinateY * 2);
+          ctx.stroke();
         });
       }
     }
@@ -74,19 +87,20 @@ function Drawing({ pdfRef }) {
     coordinateList && drawCoordinate(context);
   }, [coordinateList, pdfRef, isFullScreen]);
 
-  function handleStartDrawing(event) {
+  function handleStartDrawing(
+    event: React.MouseEvent<HTMLCanvasElement>
+  ): void {
     if (!isShowDrawing) {
       return;
-    } else {
-      const startCoordinateX = event.nativeEvent.offsetX;
-      const startCoordinateY = event.nativeEvent.offsetY;
-
-      setIsDrawing(true);
-      setCoordinate({ x: startCoordinateX, y: startCoordinateY });
     }
+    const startCoordinateX = event.nativeEvent.offsetX;
+    const startCoordinateY = event.nativeEvent.offsetY;
+
+    setIsDrawing(true);
+    setCoordinate({ x: startCoordinateX, y: startCoordinateY });
   }
 
-  function handleDrawing(event) {
+  function handleDrawing(event: React.MouseEvent<HTMLCanvasElement>): void {
     if (!isDrawing) {
       return;
     }
@@ -97,7 +111,7 @@ function Drawing({ pdfRef }) {
 
     const finishCoordinateX = event.nativeEvent.offsetX;
     const finishCoordinateY = event.nativeEvent.offsetY;
-    const saveCoordinate = {
+    const saveCoordinate: SavedCoordinate = {
       startCoordinateX: coordinate.x,
       startCoordinateY: coordinate.y,
       finishCoordinateX: finishCoordinateX,
@@ -110,11 +124,11 @@ function Drawing({ pdfRef }) {
   }
 
   useEffect(() => {
-    function getDrawingData() {
-      const savedCoordinateList = JSON.parse(
-        localStorage.getItem("coordinateList")
-      );
-      setCoordinateList(savedCoordinateList);
+    function getDrawingData(): void {
+      const savedCoordinateList = localStorage.getItem("coordinateList");
+      if (savedCoordinateList) {
+        setCoordinateList(JSON.parse(savedCoordinateList));
+      }
     }
 
     addEventListener("storage", getDrawingData);
@@ -124,7 +138,7 @@ function Drawing({ pdfRef }) {
     };
   }, []);
 
-  function handleFinishDrawing() {
+  function handleFinishDrawing(): void {
     setIsDrawing(false);
   }
 
@@ -134,7 +148,14 @@ function Drawing({ pdfRef }) {
     }
 
     const canvas = canvasRef.current;
+    if (!canvas) {
+      return;
+    }
+
     const context = canvas.getContext("2d");
+    if (!context) {
+      return;
+    }
 
     context.clearRect(0, 0, canvas.width, canvas.height);
     localStorage.removeItem("coordinateList");
@@ -150,12 +171,8 @@ function Drawing({ pdfRef }) {
       onMouseMove={handleDrawing}
       onMouseLeave={handleFinishDrawing}
       className="absolute z-10"
-    ></canvas>
+    />
   );
 }
 
 export default Drawing;
-
-Drawing.propTypes = {
-  pdfRef: PropTypes.object.isRequired,
-};
