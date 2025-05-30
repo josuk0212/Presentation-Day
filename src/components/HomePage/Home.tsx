@@ -48,8 +48,6 @@ function Home(): React.ReactElement {
     };
   }, [finishPresentationChannel, setIsFullScreen]);
 
-  function getCursorCoordinate(event: React.MouseEvent): void {}
-
   return (
     <div
       className="w-full min-h-screen bg-primary"
@@ -95,10 +93,7 @@ function Home(): React.ReactElement {
         <div className="flex items-center gap-4">
           {pdfUrl && (
             <div className="flex-1 bg-white/10 border border-white/10 backdrop-blur-sm rounded-2xl shadow-xl p-10 min-w-0">
-              <DocumentViewer
-                pdfUrl={pdfUrl}
-                getCursorCoordinate={getCursorCoordinate}
-              />
+              <DocumentViewer pdfUrl={pdfUrl} />
             </div>
           )}
           <div className="w-[400px] flex-shrink-0 bg-third border border-[#d1d5db] rounded-xl shadow-lg p-2 flex flex-col items-center gap-10">

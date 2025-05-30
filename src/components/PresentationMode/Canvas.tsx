@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import useOnOffStore from "../../stores/useOnOffStore";
 
 interface DrawingProps {
-  pdfRef: React.RefObject<HTMLCanvasElement>;
+  pdfRef: React.RefObject<HTMLCanvasElement | null>;
 }
 
 interface Coordinate {

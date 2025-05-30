@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 
@@ -7,18 +6,35 @@ import Drawing from "../PresentationMode/Canvas";
 import CursorPointer from "../PresentationMode/CursorPointer";
 import SlideViewer from "./SlideViewer";
 
+interface DocumentViewerProps {
+  pdfUrl: string;
+  getCursorCoordinate?: (event: React.MouseEvent) => void;
+}
+
+interface PdfSize {
+  width: number;
+  height: number;
+}
+
+interface LoadSuccess {
+  numPages: number;
+}
+
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
   import.meta.url
 ).toString();
 
-function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
-  const [totalPageNumber, setTotalPageNumber] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [moveIndex, setMoveIndex] = useState(0);
-  const [pdfSize, setPdfSize] = useState({ width: 0, height: 0 });
+function DocumentViewer({
+  pdfUrl,
+  getCursorCoordinate,
+}: DocumentViewerProps): React.ReactElement {
+  const [totalPageNumber, setTotalPageNumber] = useState<number | null>(null);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [moveIndex, setMoveIndex] = useState<number>(0);
+  const [pdfSize, setPdfSize] = useState<PdfSize>({ width: 0, height: 0 });
   const { isFullScreen } = useOnOffStore();
-  const pdfRef = useRef(null);
+  const pdfRef = useRef<HTMLCanvasElement>(null);
 
   const documentViewerChannel = useMemo(() => {
     const channel = new BroadcastChannel("path");
@@ -27,21 +43,22 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
   }, [pageNumber, moveIndex, totalPageNumber]);
 
   useEffect(() => {
-    documentViewerChannel.onmessage = (shareState) => {
-      setPageNumber(shareState.data[0]);
-      setMoveIndex(shareState.data[1]);
+    documentViewerChannel.onmessage = (shareState: MessageEvent): void => {
+      const [newPageNumber, newMoveIndex] = shareState.data as [number, number];
+      setPageNumber(newPageNumber);
+      setMoveIndex(newMoveIndex);
     };
   }, [documentViewerChannel]);
 
-  function onLoadSuccess({ numPages }) {
+  function onLoadSuccess({ numPages }: LoadSuccess): void {
     setTotalPageNumber(numPages);
   }
 
-  function getPdfSize(page) {
+  function getPdfSize(page: { width: number; height: number }): void {
     setPdfSize({ width: page.width, height: page.height });
   }
 
-  function handlePreviousPage() {
+  function handlePreviousPage(): void {
     if (pageNumber === 1) {
       return;
     } else {
@@ -55,7 +72,7 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
     }
   }
 
-  function handleNextPage() {
+  function handleNextPage(): void {
     if (pageNumber === totalPageNumber) {
       return;
     } else {
@@ -64,7 +81,7 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
     pageNumber % 5 === 0 && setMoveIndex((prev) => prev - 1050);
   }
 
-  function handleKeyDown(event) {
+  function handleKeyDown(event: KeyboardEvent): void {
     if (event.key === "ArrowLeft") {
       handlePreviousPage();
     } else if (event.key === "ArrowRight") {
@@ -77,9 +94,8 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
     return () => removeEventListener("keydown", handleKeyDown);
   }, [pageNumber]);
 
-  function handleChangeLoadingText() {
-    const loadingText = "Loading...";
-    return loadingText;
+  function handleChangeLoadingText(): string {
+    return "Loading...";
   }
 
   return (
@@ -162,8 +178,3 @@ function DocumentViewer({ pdfUrl, getCursorCoordinate }) {
 }
 
 export default DocumentViewer;
-
-DocumentViewer.propTypes = {
-  pdfUrl: PropTypes.string.isRequired,
-  getCursorCoordinate: PropTypes.func.isRequired,
-};

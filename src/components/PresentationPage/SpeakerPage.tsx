@@ -22,7 +22,7 @@ function SpeakerPage(): React.ReactElement {
   const drawButtonTitle = ["🖍️", "🧽"] as const;
   const closeButtonTitle = "X";
 
-  function getCursorCoordinate(event: React.MouseEvent<HTMLDivElement>): void {
+  function getCursorCoordinate(event: React.MouseEvent): void {
     const coordX = event.nativeEvent.offsetX;
     const coordY = event.nativeEvent.offsetY;
 

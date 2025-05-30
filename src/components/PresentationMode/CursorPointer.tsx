@@ -6,7 +6,7 @@ interface Coordinate {
 }
 
 interface CursorPointerProps {
-  pdfRef: React.RefObject<HTMLCanvasElement>;
+  pdfRef: React.RefObject<HTMLCanvasElement | null>;
 }
 
 function CursorPointer({ pdfRef }: CursorPointerProps): React.ReactElement {
